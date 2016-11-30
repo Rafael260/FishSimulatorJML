@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class OceanStats
 {
     // Counters for each type of entity (shark, herring, etc.) in the simulation.
-    private HashMap<Class<? extends Fish>,Counter> counters;
+    private /*@ nullable @*/ HashMap<Class<? extends Fish>,Counter> counters;
     // Whether the counters are currently up to date.
     private boolean countsValid;
 

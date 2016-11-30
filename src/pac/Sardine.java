@@ -77,7 +77,7 @@ public class Sardine extends Fish
      * @param adjacentes Posições livres adjacentes
      * @return A localização, caso consiga uma, null caso contrário
      */
-    public Location flocking(List<Location> adjacentes){
+    public /*@ nullable @*/ Location flocking(List<Location> adjacentes){
         
         Location newLocation;
         Iterator<Location> it = adjacentes.iterator();

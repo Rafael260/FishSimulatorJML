@@ -15,12 +15,11 @@ import java.util.List;
  */
 public interface Actor {
     
-    /**
-     * Realiza a ação de acordo com a natureza específica
-     * @param actors Lista de atuantes na simulação
-     */
+	
     public void act(List<Actor> actors);
+    
     public boolean isAlive();
+    
     public int getLinha();
     public void setLinha(int pos_linha);
     public int getColuna();

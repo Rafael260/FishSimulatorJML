@@ -7,33 +7,19 @@ import java.util.List;
  */
 public class Ocean extends Field
 {   
-    /**
-     * Represent an ocean of the given dimensions.
-     * @param height The height of the ocean.
-     * @param width The width of the ocean.
-     */
     public Ocean(int height, int width)
     {
         super(height,width);  
     }
     
-    /**
-     * Return the fish at the given location, if any.
-     * @param row The desired row.
-     * @param col The desired column.
-     * @return The fish at the given location, or null if there is none.
-     */
     @Override
-    public Fish getFishAt(int row, int col)
+    public /*@ nullable @*/ Fish getFishAt(int row, int col)
     {
         Actor ator = campo[row][col].getAtor();
         Fish fish = (Fish) ator;
         return fish;
     }
     
-    /**
-     * Responsável pelo comportamento das algas, podendo se espalhar.
-     */
     @Override
     public void atualizaAlgas(){
         List<Location> adjacent;

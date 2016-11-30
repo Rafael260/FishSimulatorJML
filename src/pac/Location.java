@@ -7,15 +7,11 @@ package pac;
 
 import java.util.Random;
 
-/**
- *
- * @author rafael
- */
 public class Location {
-    private int linha;
-    private int coluna;
-    private int numAlgas;
-    private Actor ator;
+    private /*@ spec_public @*/int linha;
+    private /*@ spec_public @*/ int coluna;
+    private /*@ spec_public @*/ int numAlgas;
+    private /*@ spec_public nullable @*/ Actor ator;
     
     private static final int MAX_ALGAS = 10;
     
@@ -37,37 +33,28 @@ public class Location {
     public int getNumAlgas() {
         return numAlgas;
     }
-
-    public Actor getAtor() {
+    
+    public /*@ nullable @*/ Actor getAtor() {
         return ator;
     }
 
-    public void setAtor(Actor ator) {
+    public void setAtor(/*@ nullable @*/ Actor ator) {
         this.ator = ator;
     }
         
-    /**
-     * Aumenta o número de algas, respeitando o limite
-     */
     public void incrementaAlgas(){
         if (numAlgas < MAX_ALGAS){
            numAlgas++;
         }
     }
     
-    /**
-     * Diminui o número de algas. É usado pela sardinha, que come alga
-     */
     public void decrementaAlgas(){
         if (numAlgas > 0){
             numAlgas--;
         }
     }
-    
-    /**
-     * Método para inicializar o número de algas em determinada posição
-     */
-    public void numeroRandomicoDeAlgas(){
+
+    public void definirNumeroDeAlgas(){
         Random random = new Random();
         numAlgas = random.nextInt(MAX_ALGAS+1);
     }

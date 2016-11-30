@@ -53,7 +53,7 @@ public class Tuna extends Fish
      * @param location: localização atual do atum
      * @return Localização de alguma sardinha, caso tenha, ou null, caso contrário
      */    
-    public Location encontrarComida(Location location){
+    public /*@ nullable @*/ Location encontrarComida(Location location){
         List<Location> adjacents = campo.adjacentes(location);
         Iterator<Location> it = adjacents.iterator();
         Location newLocation;

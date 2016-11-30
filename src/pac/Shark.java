@@ -10,7 +10,6 @@ import java.util.Random;
  * Sharks age, move, breed, and die.
  * Sharks eat groper or herring but they prefer groper.
  * Sharks are loners - they prefer not to swim next to each other
- * @author Richard Jones and Michael Kolling
  */
 public class Shark extends Fish
 {
@@ -29,9 +28,8 @@ public class Shark extends Fish
     }
     
     /**
-     * O tubarão primeiramente procura comida. Se não encontrar, procura uma posição mais isolada.
-     * Caso também consegue, vai para alguma aleatória, se tiver livre
-     * @param actors 
+     * O tubarao primeiramente procura comida. Se nao encontrar, procura uma posicao mais isolada.
+     * Caso tambem nao consegue, vai para alguma aleatoria, se tiver livre
      */
     @Override
     public void act(List<Actor> actors) {
@@ -51,17 +49,16 @@ public class Shark extends Fish
             newLocation = campo.posicaoAdjacenteLivre(pos_linha,pos_coluna);
         }
         
+        //Se consegui achar um local para me mover, simbora
         if (newLocation != null){
             mover(location,newLocation);
         }
     }
     
     /**
-     * Método responsável para achar comida nas posições adjacentes
-     * @param location: Local atual do tubarão
-     * @return A localização que ele deve ir caso consiga comida
+     * Achar comida nas posicoes adjacentes
      */
-    public Location encontrarComida(Location location){
+    public /*@ nullable @*/ Location encontrarComida(Location location){
         //Pega a lista de locais adjacentes à ele
         List<Location> adjacents = campo.adjacentes(location);
         Iterator<Location> it = adjacents.iterator();
@@ -75,7 +72,7 @@ public class Shark extends Fish
         while (it.hasNext()){
             newLocation = it.next();
             ator = campo.getAtor(newLocation);
-            //Mesma lógica para a sardinha
+            //Mesma logica para a sardinha
             if (ator instanceof Sardine){
                 sardine = (Sardine) ator;
                 if (sardine.isAlive()){
@@ -86,11 +83,11 @@ public class Shark extends Fish
             }
         
         }
-        //Caso não encontrar nenhuma comida, retornará null
+        //Caso nao encontrar nenhuma comida, retorna null
         return null;
     }
     
-    public Location encontrarAtum(List<Location> adjacentes){
+    public /*@ nullable @*/ Location encontrarAtum(List<Location> adjacentes){
         Iterator<Location> it = adjacentes.iterator();
         Location newLocation;
         Tuna tuna;
@@ -110,16 +107,13 @@ public class Shark extends Fish
     } 
     
     /**
-     * Procura locais adjacentes tais que as adjacentes destas não possua tubarão
-     * @param adjacents: lista de adjacentes do tubarão atual
-     * @return: Localização mais isolada, ou null caso não for possível
+     * Procura locais adjacentes tais que as adjacentes destas nao possua tubarao
      */
-    public Location isolar_se(List<Location> adjacents){
+    public /*@ nullable @*/ Location isolar_se(List<Location> adjacents){
         Iterator<Location> it = adjacents.iterator();
         Location location;
         while (it.hasNext()){
             location = it.next();
-            //Se essa posição adjacente não tiver tubarão próximo
             if (naoTemTubaraoProximo(location)){
                 return location;
             }
@@ -129,9 +123,7 @@ public class Shark extends Fish
     }
     
     /**
-     * Verifica as posições adjacentes para ver se possui tubarão próximo
-     * @param location: localização a ser testada
-     * @return true caso estiver isolada, false, caso contrário
+     * Verifica as posicoes adjacentes para ver se possui tubarao proximo
      */
     public boolean naoTemTubaraoProximo(Location location){
         List<Location> adjc = campo.adjacentes(location);
@@ -141,33 +133,25 @@ public class Shark extends Fish
         while (it.hasNext()){
             aux = it.next();
             ator = campo.getAtor(aux);
-            //Se a posição adjacente possuir um tubarão que não seja o próprio que está testando
-            if (ator instanceof Shark){
-                if (ator != this) {
-                    return false;
-                }
+            if (ator instanceof Shark && ator != this){
+                return false;
             }
         }
-        //Caso tiver passado por todas as localizações, e não achar nenhum tubarão, retorna true
         return true;
     }
     
     /**
-     * Método para gerar novos tubarões
-     * @param atores: Lista de novos tubarões, que futuramente serão adicionados na lista principal
+     * Metodo para gerar novos tubaroes
      */
     public void darCria(List<Actor> atores){
-        //Pega a lista de posições adjacentes livres para poder criar os filhos
         List<Location> livres = campo.getPosicoesAdjacentesLivres(pos_linha,pos_coluna);
-        //recebe o número randômico de filhos que poderá ter
         int numFilhos = numeroDeFilhos(BREED_AGE,BREED_PROBABILITY,MAX_BREED);
         Location local_atual;
-        //Adiciona os filhos nas posições adjacentes
+        //Adiciona os filhos nas posicoes adjacentes
         for (int i = 0; i < numFilhos && livres.size() > 0; i++){
             local_atual = livres.remove(0);
             Shark newShark = new Shark(campo,local_atual.getLinha(),local_atual.getColuna());
             atores.add(newShark);
         }
-    }
-    
+    }   
 }

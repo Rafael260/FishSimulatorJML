@@ -12,13 +12,13 @@ import java.util.Random;
 
 public class Simulator
 {
-    private Field campo;
-    private SimulatorView simView;
-    private List<Actor> atores;
+    private /*@ nullable @*/ Field campo;
+    private /*@ nullable @*/ SimulatorView simView;
+    private /*@ nullable @*/ List<Actor> atores;
     
     private static final double PROBABILIDADE_CRIAR_SHARK = 0.02;
-    private static final double PROBABILIDADE_CRIAR_SARDINE = 0.09;
-    private static final double PROBABILIDADE_CRIAR_TUNA = 0.08;
+    private static final double PROBABILIDADE_CRIAR_SARDINE = 0.08;
+    private static final double PROBABILIDADE_CRIAR_TUNA = 0.07;
     
     
     public Simulator(int height, int width)
@@ -35,10 +35,8 @@ public class Simulator
     
     public void populate(){
         Random rand = new Random();
-        //Percorrerá todo o campo para criar Atores
         for (int linha = 0; linha < campo.getHeight(); linha++){
             for (int coluna = 0; coluna < campo.getWidth(); coluna++){
-                //Se cair na taxa de algum peixe, será instanciado
                 if (rand.nextDouble() <= PROBABILIDADE_CRIAR_SHARK){
                     Shark shark = new Shark(campo,linha,coluna);
                     atores.add(shark);
@@ -51,29 +49,22 @@ public class Simulator
                     Tuna tuna = new Tuna(campo,linha,coluna);
                     atores.add(tuna);
                 }
-                //Esse método redefinará o número de algas em cada posição
-                campo.getLocation(linha,coluna).numeroRandomicoDeAlgas();
+                campo.getLocation(linha,coluna).definirNumeroDeAlgas();
             }
         }
     }
     
     public void run()
     {  
-        //Inicializa o tabuleiro com os peixes
         populate();
         int i = 0;
-        //A simulação é contínua. O que fará o loop parar é quando ocorrer a presença 
-        //de somente um tipo de peixe no tabuleiro (método isViable)
         while (true){
-            //Mostra o tabuleiro na animação
             simView.showStatus(i, campo);
             //As algas existentes podem se espalhar pelo oceano
             campo.atualizaAlgas();
             //remove os atores que foram setados como mortos
             removeMortos();            
-            //chama o método act de cada ator vivo
             acao();
-            //Se não tiver variedade, acaba o loop
             if (!simView.isViable(campo))
                 return;
             //processSleep(300);
@@ -81,10 +72,6 @@ public class Simulator
         }
     }
     
-    /**
-     * Usa o sleep para que o loop seja mais fácil de visualizar, dando tempo de perceber os movimentos
-     * @param miliseg: quantos milisegundos fica parado por loop
-     */
     public void processSleep(int miliseg){
         try{
             sleep(miliseg);
@@ -100,7 +87,6 @@ public class Simulator
         Iterator<Actor> it = atores.iterator();
         while (it.hasNext()){
             atorAux = it.next();
-            //Se ele morreu, limpa a posição do tabuleiro
             if (!atorAux.isAlive()){
                 it.remove();
                 campo.limparPosicao(atorAux.getLinha(), atorAux.getColuna());

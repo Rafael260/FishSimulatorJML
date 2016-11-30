@@ -13,17 +13,16 @@ import java.util.Random;
  */
 public abstract class Fish implements Actor
 {
-    protected Random random;
+    protected /*@ nullable @*/ Random random;
     protected boolean isAlive;
     protected int age;
     protected int nivelFome;
     protected int pos_linha;
     protected int pos_coluna;
-    protected Field campo;
+    protected /*@ nullable @*/Field campo;
     
     /**
      * Constructor for objects of class Fish
-     * @param campo é o campo onde todos se encontram
      */
     public Fish(Field campo, int linha, int coluna)
     {
@@ -37,8 +36,7 @@ public abstract class Fish implements Actor
         campo.colocarAtor(this, linha, coluna);
     }
     /**
-     * Função para saber se o ator está vivo
-     * @return true, se o ator estiver vivo, false caso contrário
+     * Funcao para saber se o ator esta vivo
      */
     @Override
     public boolean isAlive() {
@@ -78,7 +76,7 @@ public abstract class Fish implements Actor
     }
     
     /**
-     * Esvazia a posição que o ator estava e marca como morto, para ser excluído da lista
+     * Esvazia a posicao que o ator estava e marca como morto, para ser excluido da lista
      */        
     public void setMorto(){
         campo.limparPosicao(pos_linha, pos_coluna);
@@ -86,9 +84,7 @@ public abstract class Fish implements Actor
     }
     
     /**
-     * Inicia a fome de forma aleatória
-     * @param maxFood é o número máximo de fome que o ator pode assumir
-     * @return o número da fome do ator
+     * Inicia a fome de forma aleatoria
      */
     public  int inicializaFome(int maxFood){
         return random.nextInt(maxFood - 10) + 10;
@@ -114,12 +110,10 @@ public abstract class Fish implements Actor
     }
     
     /**
-     * O ator chama esse método quando encontra comida, aumenta seu nível da fome
-     * @param valor é a quantidade de comida que o ator recebe
-     * @param maxFood é o limite de comida para o ator
+     * O ator chama esse metodo quando encontra comida, aumenta seu nivel da energia
      */
     public void alimenta(int valor, int maxFood){
-        nivelFome+=valor;
+        nivelFome += valor;
         if (nivelFome > maxFood){
             nivelFome = maxFood;
         }
@@ -127,9 +121,7 @@ public abstract class Fish implements Actor
     }
     
     /**
-     * Move o ator de posição no tabuleiro
-     * @param location é a localização atual
-     * @param newLocation é a nova localização que o ator irá
+     * Move o ator de posicao no tabuleiro
      */
     public void mover(Location location, Location newLocation){
         campo.colocarAtor(this, newLocation);
@@ -139,21 +131,15 @@ public abstract class Fish implements Actor
     }
     
     /**
-     * Método usado para saber quando o ator pode ter filho
-     * @param idadeMinima Idade mínima para gerar filhos
-     * @return true ou false, dependendo dos valores
+     * Metodo usado para saber quando o ator pode ter filho
      */
     public boolean podeTerFilho(int idadeMinima){
         return age >= idadeMinima;
     }
 
     /**
-     * Método responsável para dizer quantos filhos um ator poderá ter num determinado momento
-     * É usado um randômico
-     * @param idadeMinima é a condição para ter filho e chamar o método responsável para isso
-     * @param probabilidade é o valor decimal para verificar as chances de ter filho
-     * @param maxFilhos é o número máximo de filhos que o ator pode ter de uma vez
-     * @return o número de filhos que irá nascer
+     * Metodo responsavel para dizer quantos filhos um ator podera ter num determinado momento
+     * e usado um randomico
      */
     public int numeroDeFilhos(int idadeMinima, double probabilidade, int maxFilhos){
         int numFilhos = 0;

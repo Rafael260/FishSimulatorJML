@@ -18,20 +18,20 @@ public class SimulatorView extends JFrame
 	private static final long serialVersionUID = 1L;
 
 	// Colors used for empty locations.
-    private static final Color EMPTY_COLOR = Color.white;
+    private static final /*@ nullable @*/ Color EMPTY_COLOR = Color.white;
 
     // Color used for objects that have no defined color.
-    private static final Color UNKNOWN_COLOR = Color.gray;
+    private static final /*@ nullable @*/ Color UNKNOWN_COLOR = Color.gray;
 
     private final String STEP_PREFIX = "Step: ";
     private final String POPULATION_PREFIX = "Population: ";
-    private JLabel stepLabel, population;
-    private OceanView oceanView;
+    private /*@ nullable @*/ JLabel stepLabel, population;
+    private /*@ nullable @*/ OceanView oceanView;
     
     // A map for storing colors for participants in the simulation
-    private HashMap<Class<? extends Fish>,Color> colors;
+    private /*@ nullable @*/ HashMap<Class<? extends Fish>,Color> colors;
     // A statistics object computing and storing simulation information
-    private OceanStats stats;
+    private /*@ nullable @*/ OceanStats stats;
 
     /**
      * Create a view of the given width and height.
@@ -141,9 +141,9 @@ public class SimulatorView extends JFrame
 
         private int gridWidth, gridHeight;
         private int xScale, yScale;
-        Dimension size;
-        private Graphics g;
-        private Image oceanImage;
+        /*@ nullable @*/ Dimension  size;
+        private /*@ nullable @*/ Graphics g;
+        private /*@ nullable @*/ Image oceanImage;
 
         /**
          * Create a new OceanView component.
