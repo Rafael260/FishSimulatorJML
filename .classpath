@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/abc-complete.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/abcrt4ajml.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/ajcrt4ajml.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/ajmlrt1.8.beta1.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/ant.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/antlr-4.3-complete.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/antlr-javaparser-1.0.15.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/antlr.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/aspectjml-release1.8.0.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/aspectjrt.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/aspectjtools.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/GetOpt.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/junit.jar"/>
+	<classpathentry kind="lib" path="src/pac/aspectjml-lib/qdox-1.12.1-extended.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/abc-complete.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/abcrt4ajml.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/ajcrt4ajml.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/ajmlrt1.8.beta1.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/ant.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/antlr-4.3-complete.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/antlr-javaparser-1.0.15.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/antlr.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/aspectjml-release1.8.0.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/aspectjrt.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/aspectjtools.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/GetOpt.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/junit.jar"/>
+	<classpathentry kind="lib" path="aspectjml-lib/qdox-1.12.1-extended.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
