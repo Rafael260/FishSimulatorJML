@@ -71,7 +71,7 @@ public class SimulatorView extends JFrame
     /**
      * @return The color to be used for a given class of fish.
      */
-    private Color getColor(Class<? extends Fish> fishClass)
+    private /*@ pure @*/ Color getColor(Class<? extends Fish> fishClass)
     {
         Color col = colors.get(fishClass);
         if(col == null) {
@@ -120,7 +120,7 @@ public class SimulatorView extends JFrame
      * Determine whether the simulation should continue to run.
      * @return true If there is more than one species alive.
      */
-    public boolean isViable(Field ocean)
+    public /*@ pure @*/ boolean isViable(Field ocean)
     {
         return stats.isViable((Ocean)ocean);
     }
@@ -139,11 +139,11 @@ public class SimulatorView extends JFrame
 
 		private final int GRID_VIEW_SCALING_FACTOR = 6;
 
-        private int gridWidth, gridHeight;
-        private int xScale, yScale;
-        /*@ nullable @*/ Dimension  size;
-        private /*@ nullable @*/ Graphics g;
-        private /*@ nullable @*/ Image oceanImage;
+        private /*@ spec_public @*/ int gridWidth, gridHeight;
+        private /*@ spec_public @*/ int xScale, yScale;
+        /*@ nullable spec_public @*/ Dimension  size;
+        private /*@ nullable spec_public @*/ Graphics g;
+        private /*@ nullable spec_public @*/ Image oceanImage;
 
         /**
          * Create a new OceanView component.

@@ -15,9 +15,11 @@ import java.util.List;
  */
 public interface Actor {
     
+	//public model instance boolean isActive;
 	
     public void act(List<Actor> actors);
     
+    //ensures \result == isActive;
     public boolean isAlive();
     
     public int getLinha();

@@ -13,9 +13,9 @@ import java.util.HashMap;
 public class OceanStats
 {
     // Counters for each type of entity (shark, herring, etc.) in the simulation.
-    private /*@ nullable @*/ HashMap<Class<? extends Fish>,Counter> counters;
+    private /*@ nullable spec_public @*/ HashMap<Class<? extends Fish>,Counter> counters;
     // Whether the counters are currently up to date.
-    private boolean countsValid;
+    private /*@ spec_public @*/ boolean countsValid;
 
     /**
      * Construct a ocean-statistics object.
@@ -31,7 +31,7 @@ public class OceanStats
     /**
      * @return A string describing what fish are in the ocean.
      */
-    public String getPopulationDetails(Ocean ocean)
+    public /*@ pure @*/ String getPopulationDetails(Ocean ocean)
     {
         StringBuffer buffer = new StringBuffer();
         if(!countsValid) {
@@ -96,7 +96,7 @@ public class OceanStats
      * I.e., should it continue to run.
      * @return true If there is more than one species alive.
      */
-    public boolean isViable(Ocean ocean)
+    public /*@ pure @*/ boolean isViable(Ocean ocean)
     {
         // How many counts are non-zero.
         int nonZero = 0;

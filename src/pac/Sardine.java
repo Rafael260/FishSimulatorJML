@@ -77,7 +77,7 @@ public class Sardine extends Fish
      * @param adjacentes Posições livres adjacentes
      * @return A localização, caso consiga uma, null caso contrário
      */
-    public /*@ nullable @*/ Location flocking(List<Location> adjacentes){
+    public /*@ nullable pure @*/ Location flocking(List<Location> adjacentes){
         
         Location newLocation;
         Iterator<Location> it = adjacentes.iterator();
@@ -91,18 +91,16 @@ public class Sardine extends Fish
     }
     
     /**
-     * Verifica se a posição tem sardinha próxima.
-     * @param adjacentes Posições adjacentes à que esta sendo testada
-     * @return true, se possui sardinha, false caso contrário
+     * Verifica se a posicao tem sardinha proxima.
      */
-    public boolean temSardinha(List<Location> adjacentes){
+    public /*@ pure @*/ boolean temSardinha(List<Location> adjacentes){
         Iterator <Location> it = adjacentes.iterator();
         Location newLocation;
         Actor ator;
         while (it.hasNext()){
             newLocation = it.next();
             ator = campo.getAtor(newLocation);
-            //Se a posição adjacente possuir uma sardinha que não seja a própria que está testando
+            //Se a posicao adjacente possuir uma sardinha que nao seja a propria que esta testando
             if (ator instanceof Sardine){
                 if (ator != this) {
                     return true;
@@ -113,25 +111,23 @@ public class Sardine extends Fish
         return false;
     }
     /**
-     * Verifica se a posição está livre de predadores
-     * @param adjacentes: Posições adjacentes da posição que está testando
-     * @return true se está livre, false se tem predador próximo
+     * Verifica se a posicao esta livre de predadores
+     * @param adjacentes: Posicoes adjacentes da posicao que esta testando
+     * @return true se esta livre, false se tem predador proximo
      */
-    public boolean naoTemPredador(List<Location> adjacentes){
+    public /*@ pure @*/ boolean naoTemPredador(List<Location> adjacentes){
         Iterator <Location> it = adjacentes.iterator();
         Location newLocation;
         Actor ator;
         while (it.hasNext()){
             newLocation = it.next();
             ator = campo.getAtor(newLocation);
-            //Se a posição adjacente possuir um tubarão
+            //Se a posicao adjacente possuir um tubarao
             if (ator instanceof Shark || ator instanceof Tuna){
                 return false;   
             }
         }
-        //Caso tiver passado por todas as localizações, e não achar nenhum tubarão, retorna true
+        //Caso tiver passado por todas as localizacoes, e nao achar nenhum tubarao ou atum, retorna true
         return true;
     }
-    
-    
 }

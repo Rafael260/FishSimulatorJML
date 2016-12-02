@@ -13,9 +13,9 @@ package pac;
 public class Counter
 {
     // A name for this type of simulation participant
-    private /*@ nullable @*/ String name;
+    private /*@ nullable spec_public @*/ String name;
     // How many of this type exist in the simulation.
-    private int count;
+    private /*@ spec_public @*/ int count;
 
     /**
      * Provide a name for one of the simulation types.

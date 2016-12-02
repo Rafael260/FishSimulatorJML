@@ -13,9 +13,9 @@ import java.util.List;
 
 public abstract class Field {
     
-    protected /*@ nullable @*/ Location[][] campo;
-    protected int tamanhoAltura;
-    protected int tamanhoLargura;
+    protected /*@ nullable spec_public @*/ Location[][] campo;
+    protected /*@ spec_public @*/ int tamanhoAltura;
+    protected /*@ spec_public @*/ int tamanhoLargura;
     
     private static final int TAMANHO_MINIMO = 5;
     private static final int TAMANHO_PADRAO = 50;
@@ -41,17 +41,17 @@ public abstract class Field {
     }
     
     abstract public void atualizaAlgas();
-    abstract public /*@ nullable @*/ Fish getFishAt(int row, int col);
+    abstract public /*@ nullable pure @*/ Fish getFishAt(int row, int col);
 
-    public int getHeight() {
+    public /*@ pure @*/ int getHeight() {
         return tamanhoAltura;
     }
 
-    public int getWidth() {
+    public /*@ pure @*/ int getWidth() {
         return tamanhoLargura;
     }
     
-    public boolean estaNoIntervalo(int linha, int coluna){
+    public /*@ pure @*/ boolean estaNoIntervalo(int linha, int coluna){
         return linha >= 0 && coluna >= 0 && linha < tamanhoAltura && coluna < tamanhoLargura;
     }
     
@@ -60,15 +60,16 @@ public abstract class Field {
         return height >= TAMANHO_MINIMO && width >= TAMANHO_MINIMO;
     }
     
-    public Location getLocation(int linha, int coluna){
+    public /*@ pure @*/ Location getLocation(int linha, int coluna){
         return campo[linha][coluna];
     }
     
-    public /*@ nullable @*/ Actor getAtor(Location loc){
+    public /*@ nullable pure @*/ Actor getAtor(Location loc){
         return getAtor(loc.getLinha(),loc.getColuna());
     }
     
-    public /*@ nullable @*/ Actor getAtor (int linha, int coluna){
+    //Podemos tratar uma excecao aqui, com base na linha e coluna que esta acessando
+    public /*@ nullable pure @*/ Actor getAtor (int linha, int coluna){
         if (estaNoIntervalo(linha,coluna))
             return campo[linha][coluna].getAtor();
         else{
@@ -77,7 +78,7 @@ public abstract class Field {
     }
    
     //-------------------------------------------------------------------------------
-    public List<Location> adjacentes(Location location){
+    public /*@ pure @*/ List<Location> adjacentes(Location location){
     
         if (location == null){
             return null;
@@ -108,12 +109,12 @@ public abstract class Field {
         
         return locations;
     }
-    public List<Location> adjacentes(int linha, int coluna){
+    public /*@ pure @*/ List<Location> adjacentes(int linha, int coluna){
         return adjacentes(new Location(linha,coluna));
     }
     
     //-------------------------------------------------------------------------------
-    public List<Location> getPosicoesAdjacentesLivres(Location location){
+    public /*@ pure @*/ List<Location> getPosicoesAdjacentesLivres(Location location){
         List<Location> livres = new LinkedList<>();
         List<Location> pos_adjacentes = adjacentes(location);
         
@@ -126,7 +127,7 @@ public abstract class Field {
         return livres;
     }
     
-    public List<Location> getPosicoesAdjacentesLivres(int linha, int coluna){
+    public /*@ pure @*/ List<Location> getPosicoesAdjacentesLivres(int linha, int coluna){
         return getPosicoesAdjacentesLivres(new Location(linha,coluna));
     }
     
@@ -141,14 +142,14 @@ public abstract class Field {
         }
     }
     
-    public /*@ nullable @*/ Location posicaoAdjacenteLivre(int linha, int coluna){
+    public /*@ nullable pure @*/ Location posicaoAdjacenteLivre(int linha, int coluna){
         return posicaoAdjacenteLivre(new Location(linha,coluna));
     }
     //-------------------------------------------------------------------------------
     
     
     public void limparPosicao(int linha, int coluna){
-        limparPosicao(new Location(linha,coluna));
+    	campo[linha][coluna].setAtor(null);
     }
     
     public void limparPosicao(Location loc){

@@ -22,19 +22,19 @@ public class Location {
         ator = null;
     }
 
-    public int getLinha() {
+    public /*@ pure @*/ int getLinha() {
         return linha;
     }
 
-    public int getColuna() {
+    public /*@ pure @*/ int getColuna() {
         return coluna;
     }
 
-    public int getNumAlgas() {
+    public /*@ pure @*/ int getNumAlgas() {
         return numAlgas;
     }
     
-    public /*@ nullable @*/ Actor getAtor() {
+    public /*@ nullable pure @*/ Actor getAtor() {
         return ator;
     }
 

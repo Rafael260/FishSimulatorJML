@@ -12,9 +12,9 @@ import java.util.Random;
 
 public class Simulator
 {
-    private /*@ nullable @*/ Field campo;
-    private /*@ nullable @*/ SimulatorView simView;
-    private /*@ nullable @*/ List<Actor> atores;
+    private /*@ nullable spec_public @*/ Field campo;
+    private /*@ nullable spec_public @*/ SimulatorView simView;
+    private /*@ nullable spec_public @*/ List<Actor> atores;
     
     private static final double PROBABILIDADE_CRIAR_SHARK = 0.02;
     private static final double PROBABILIDADE_CRIAR_SARDINE = 0.08;

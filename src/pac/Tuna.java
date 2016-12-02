@@ -16,7 +16,7 @@ public class Tuna extends Fish
     private static final int MAX_AGE = 53;
     private static final int MAX_FOOD = 29;
     private static final int BREED_AGE = 15;
-    private static final double BREED_PROBABILITY = 0.15;
+    private static final double BREED_PROBABILITY = 0.1;
     private static final int MAX_BREED = 4;
     private static final int SARDINE_FOOD_VALUE = 5;
     
@@ -53,7 +53,7 @@ public class Tuna extends Fish
      * @param location: localização atual do atum
      * @return Localização de alguma sardinha, caso tenha, ou null, caso contrário
      */    
-    public /*@ nullable @*/ Location encontrarComida(Location location){
+    public /*@ nullable pure @*/ Location encontrarComida(Location location){
         List<Location> adjacents = campo.adjacentes(location);
         Iterator<Location> it = adjacents.iterator();
         Location newLocation;

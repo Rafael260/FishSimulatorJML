@@ -13,7 +13,7 @@ public class Ocean extends Field
     }
     
     @Override
-    public /*@ nullable @*/ Fish getFishAt(int row, int col)
+    public /*@ nullable pure @*/ Fish getFishAt(int row, int col)
     {
         Actor ator = campo[row][col].getAtor();
         Fish fish = (Fish) ator;

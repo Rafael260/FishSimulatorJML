@@ -14,12 +14,12 @@ import java.util.Random;
 public abstract class Fish implements Actor
 {
     protected /*@ nullable @*/ Random random;
-    protected boolean isAlive;
-    protected int age;
-    protected int nivelFome;
-    protected int pos_linha;
-    protected int pos_coluna;
-    protected /*@ nullable @*/Field campo;
+    protected /*@ spec_public @*/ boolean isAlive; // in isActive;
+    protected /*@ spec_public @*/ int age;
+    protected /*@ spec_public @*/ int nivelFome;
+    protected /*@ spec_public @*/ int pos_linha;
+    protected /*@ spec_public @*/ int pos_coluna;
+    protected /*@ spec_public @*/ Field campo;
     
     /**
      * Constructor for objects of class Fish
@@ -35,19 +35,23 @@ public abstract class Fish implements Actor
         pos_coluna = coluna;
         campo.colocarAtor(this, linha, coluna);
     }
+    
+    /* protected represents
+      @ isActive = (this.isAlive ? true : false);
+       */
     /**
      * Funcao para saber se o ator esta vivo
      */
     @Override
-    public boolean isAlive() {
-        return isAlive;
+    public /*@ pure @*/ boolean isAlive() {
+        return this.isAlive;
     }
     
     /**
      * 
      * @return a idade do ator
      */
-    public int getAge() {
+    public /*@ pure @*/ int getAge() {
         return age;
     }
 
@@ -56,7 +60,7 @@ public abstract class Fish implements Actor
     }
 
     @Override
-    public int getLinha() {
+    public /*@ pure @*/ int getLinha() {
         return pos_linha;
     }
 
@@ -66,7 +70,7 @@ public abstract class Fish implements Actor
     }
 
     @Override
-    public int getColuna() {
+    public /*@ pure @*/ int getColuna() {
         return pos_coluna;
     }
 
@@ -75,6 +79,10 @@ public abstract class Fish implements Actor
         this.pos_coluna = pos_coluna;
     }
     
+    //@ assignable isAlive;
+    //@ ensures !this.isAlive;
+    //Esse ensures da problema
+    //ensures this.campo.getLocation(pos_linha, pos_coluna).getAtor() == null;
     /**
      * Esvazia a posicao que o ator estava e marca como morto, para ser excluido da lista
      */        
@@ -86,7 +94,7 @@ public abstract class Fish implements Actor
     /**
      * Inicia a fome de forma aleatoria
      */
-    public  int inicializaFome(int maxFood){
+    public int inicializaFome(int maxFood){
         return random.nextInt(maxFood - 10) + 10;
     }
     
@@ -116,8 +124,7 @@ public abstract class Fish implements Actor
         nivelFome += valor;
         if (nivelFome > maxFood){
             nivelFome = maxFood;
-        }
-        
+        }   
     }
     
     /**
@@ -130,6 +137,10 @@ public abstract class Fish implements Actor
         campo.limparPosicao(location);
     }
     
+    //Esse ensures tambem da problema
+    /* requires idadeMinima >= 0;
+      @ ensures \result == this.age >= idadeMinima;
+      */
     /**
      * Metodo usado para saber quando o ator pode ter filho
      */
@@ -148,5 +159,4 @@ public abstract class Fish implements Actor
         }
         return numFilhos;
     }
-    
 }

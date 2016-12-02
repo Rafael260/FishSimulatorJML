@@ -17,7 +17,7 @@ public class Shark extends Fish
     private static final int MAX_AGE = 60;
     private static final int MAX_FOOD = 40;
     private static final int BREED_AGE = 18;
-    private static final double BREED_PROBABILITY = 0.03;
+    private static final double BREED_PROBABILITY = 0.04;
     private static final int MAX_BREED = 3;
     private static final int SARDINE_FOOD_VALUE = 3;
     private static final int TUNA_FOOD_VALUE = 5;
@@ -125,7 +125,7 @@ public class Shark extends Fish
     /**
      * Verifica as posicoes adjacentes para ver se possui tubarao proximo
      */
-    public boolean naoTemTubaraoProximo(Location location){
+    public /*@ pure @*/ boolean naoTemTubaraoProximo(Location location){
         List<Location> adjc = campo.adjacentes(location);
         Iterator <Location> it = adjc.iterator();
         Location aux;
