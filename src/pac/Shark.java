@@ -51,7 +51,7 @@ public class Shark extends Fish
         
         //Se consegui achar um local para me mover, simbora
         if (newLocation != null){
-            mover(location,newLocation);
+            mover(newLocation);
         }
     }
     

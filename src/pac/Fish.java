@@ -153,18 +153,16 @@ public abstract class Fish implements Actor
     /**
      * Move o ator de posicao no tabuleiro
      */
-    //@requires location != null;
     //@requires newLocation != null;
-    //requer que inicialmente o ator esteja em location
-    //requires campo.getAtor(location.getLinha(),location.getColuna()) == this;
-    //@ensures campo.getAtor(location.getLinha(),location.getColuna()) == null;
-    //Garante que o ator estara na nova localizacao
-    //@ensures campo.getAtor(newLocation.getLinha(),newLocation.getColuna()).equals(this);
-    public void mover(Location location, Location newLocation){
-        campo.colocarAtor(this, newLocation);
+    //@requires Field.saoAdjacentes(getLocation(),newLocation);
+    //@ ensures campo.getAtor(newLocation).equals(this);
+    //@ ensures campo.getAtor(\old(pos_linha),\old(pos_coluna)) == null;
+    public void mover(Location newLocation){
+        Location oldLocation = getLocation();
+    	campo.colocarAtor(this, newLocation);
         pos_linha = newLocation.getLinha();
         pos_coluna = newLocation.getColuna();
-        campo.limparPosicao(location);
+        campo.limparPosicao(oldLocation);
     }
     
     //@ requires idadeMinima >= 0;

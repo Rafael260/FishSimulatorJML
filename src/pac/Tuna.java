@@ -44,7 +44,7 @@ public class Tuna extends Fish
         
         //Se newLocation eh null, achou posicao pra se mover
         if (newLocation != null){
-            mover(location,newLocation);
+            mover(newLocation);
         }
         
     }

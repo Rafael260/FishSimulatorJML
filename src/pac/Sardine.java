@@ -53,7 +53,7 @@ public class Sardine extends Fish
         //Poderia mudar para um try catch, tenta se movimentar
         //Se achou alguma posicao, se movimenta
         if (newLocation != null){
-            mover(getLocation(),newLocation);
+            mover(newLocation);
         }
     }
     
