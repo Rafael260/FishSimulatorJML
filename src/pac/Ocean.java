@@ -13,24 +13,16 @@ public class Ocean extends Field
     }
     
     @Override
-    public /*@ nullable pure @*/ Fish getFishAt(int row, int col)
-    {
-        Actor ator = campo[row][col].getAtor();
-        Fish fish = (Fish) ator;
-        return fish;
-    }
-    
-    @Override
     public void atualizaAlgas(){
         List<Location> adjacent;
         for (int linha = 0; linha < tamanhoAltura; linha++){
             for (int coluna = 0; coluna < tamanhoLargura; coluna++){
-                //Se tiver ao menos quatro algas nessa posição - definir qual número mais adequado
+                //Se tiver ao menos quatro algas nessa posicao
                 if(campo[linha][coluna].getNumAlgas() > 4){
-                    //Pega as posições adjacentes
+                    //Pega as posicoes adjacentes
                     adjacent = adjacentes(campo[linha][coluna]);
                     
-                    //E se espalha para essa posição aleatória
+                    //E se espalha para essa posicao aleatoria
                     adjacent.get(0).incrementaAlgas();
                 }
             }

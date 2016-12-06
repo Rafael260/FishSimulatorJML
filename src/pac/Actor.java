@@ -15,15 +15,22 @@ import java.util.List;
  */
 public interface Actor {
     
-	//public model instance boolean isActive;
+	//@public model instance boolean isActive;
+	//@public model instance int row;
+	//@public model instance int col;
+	//@public model instance int age;
 	
     public void act(List<Actor> actors);
     
-    //ensures \result == isActive;
+    //@ensures \result ==> isActive;
     public boolean isAlive();
     
-    public int getLinha();
+    public /*@ pure @*/ int getLinha();
     public void setLinha(int pos_linha);
-    public int getColuna();
+    public /*@ pure @*/ int getColuna();
     public void setColuna(int pos_coluna);
+    public /*@ pure @*/ boolean equals(Actor ator);
+    public /*@ pure @*/ int getAge();
+    public /*@ pure @*/ int getEnergia();
+    public /*@ pure @*/ Location getLocation();
 }

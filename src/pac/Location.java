@@ -13,7 +13,7 @@ public class Location {
     private /*@ spec_public @*/ int numAlgas;
     private /*@ spec_public nullable @*/ Actor ator;
     
-    private static final int MAX_ALGAS = 10;
+    private static final /*@ spec_public @*/ int  MAX_ALGAS = 10;
     
     public Location(int l, int c){
         linha = l;
@@ -42,20 +42,30 @@ public class Location {
         this.ator = ator;
     }
         
+    //@ensures (this.numAlgas < MAX_ALGAS) ==> (this.numAlgas == \old(this.numAlgas) + 1);
+    //@ensures this.numAlgas <= MAX_ALGAS;
     public void incrementaAlgas(){
         if (numAlgas < MAX_ALGAS){
            numAlgas++;
         }
     }
     
+    //@ensures (numAlgas > 0) ==> (numAlgas == \old(numAlgas) - 1);
+    //@ensures numAlgas >= 0;
     public void decrementaAlgas(){
         if (numAlgas > 0){
             numAlgas--;
         }
     }
 
+    //@ensures numAlgas <= MAX_ALGAS;
+    //@ensures numAlgas >= 0;
     public void definirNumeroDeAlgas(){
         Random random = new Random();
         numAlgas = random.nextInt(MAX_ALGAS+1);
+    }
+    //@ ensures \result ==> (this.linha == location.getLinha() && this.coluna == location.getColuna() && this.ator.equals(location.getAtor()));
+    public /*@ pure @*/ boolean equals(Location location){
+    	return this.linha == location.getLinha() && this.coluna == location.getColuna() && this.ator.equals(location.getAtor());
     }
 }

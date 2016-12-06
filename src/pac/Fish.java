@@ -13,10 +13,10 @@ import java.util.Random;
  */
 public abstract class Fish implements Actor
 {
-    protected /*@ nullable @*/ Random random;
-    protected /*@ spec_public @*/ boolean isAlive; // in isActive;
+    protected /*@ nullable spec_public @*/ Random random;
+    protected /*@ spec_public @*/ boolean isAlive; //@ in isActive;
     protected /*@ spec_public @*/ int age;
-    protected /*@ spec_public @*/ int nivelFome;
+    protected /*@ spec_public @*/ int nivelEnergia;
     protected /*@ spec_public @*/ int pos_linha;
     protected /*@ spec_public @*/ int pos_coluna;
     protected /*@ spec_public @*/ Field campo;
@@ -28,7 +28,7 @@ public abstract class Fish implements Actor
     {
         random = new Random();
         isAlive = true;
-        nivelFome = 15;
+        nivelEnergia = 15;
         age = 0;
         this.campo = campo;
         pos_linha = linha;
@@ -36,9 +36,9 @@ public abstract class Fish implements Actor
         campo.colocarAtor(this, linha, coluna);
     }
     
-    /* protected represents
-      @ isActive = (this.isAlive ? true : false);
-       */
+    /*@ protected represents
+      @ isActive = this.isAlive;
+      @*/
     /**
      * Funcao para saber se o ator esta vivo
      */
@@ -79,10 +79,23 @@ public abstract class Fish implements Actor
         this.pos_coluna = pos_coluna;
     }
     
+    public int getEnergia(){
+    	return this.nivelEnergia;
+    }
+    
+	public Location getLocation() {
+		return campo.getLocation(pos_linha, pos_coluna);
+	}
+    
+    @Override
+	public /*@ pure @*/ boolean equals(Actor ator) {
+		return this.isAlive == ator.isAlive() && this.age == ator.getAge() && this.pos_linha == ator.getLinha() && this.pos_coluna == ator.getColuna();
+	}
+    
     //@ assignable isAlive;
     //@ ensures !this.isAlive;
-    //Esse ensures da problema
-    //ensures this.campo.getLocation(pos_linha, pos_coluna).getAtor() == null;
+    //Garante que o campo em que o ator ocupava estara disponivel para outros atores
+    //@ensures this.campo.getLocation(pos_linha, pos_coluna).getAtor() == null;
     /**
      * Esvazia a posicao que o ator estava e marca como morto, para ser excluido da lista
      */        
@@ -94,14 +107,18 @@ public abstract class Fish implements Actor
     /**
      * Inicia a fome de forma aleatoria
      */
+    //@requires maxFood > 0;
+    //@ensures \result >= 10 && \result < maxFood;
     public int inicializaFome(int maxFood){
         return random.nextInt(maxFood - 10) + 10;
     }
     
     /**
-     * Aumenta em 1 unidade a idade, e o seta morto caso atinga a idade máxima
-     * @param maxAge é a idade máxima
+     * Aumenta em 1 unidade a idade, e o seta morto caso atinga a idade maxima
      */
+    //@requires maxAge > 0;
+    //Garante que se ele ja atingiu a idade maxima, ele morre
+    //@ensures (age > maxAge) ==> !this.isAlive;
     public void incrementAge(int maxAge){
         age++;
         if (age > maxAge)
@@ -110,9 +127,11 @@ public abstract class Fish implements Actor
     /**
      * Diminui 1 da fome, se zerar, seta morto
      */
+    //@ensures nivelEnergia == \old(nivelEnergia) - 1;
+    //@ensures (nivelEnergia <= 0) ==> !this.isAlive;
     public void decrementaNivelFome(){
-        nivelFome--;
-        if (nivelFome <= 0){
+        nivelEnergia--;
+        if (nivelEnergia <= 0){
             setMorto();
         }
     }
@@ -120,16 +139,27 @@ public abstract class Fish implements Actor
     /**
      * O ator chama esse metodo quando encontra comida, aumenta seu nivel da energia
      */
+    //@ requires valor >= 0;
+    //@ requires maxFood > 0;
+    //@ ensures nivelEnergia >= \old(nivelEnergia);
+    //@ ensures nivelEnergia <= maxFood;
     public void alimenta(int valor, int maxFood){
-        nivelFome += valor;
-        if (nivelFome > maxFood){
-            nivelFome = maxFood;
+        nivelEnergia += valor;
+        if (nivelEnergia > maxFood){
+            nivelEnergia = maxFood;
         }   
     }
     
     /**
      * Move o ator de posicao no tabuleiro
      */
+    //@requires location != null;
+    //@requires newLocation != null;
+    //requer que inicialmente o ator esteja em location
+    //requires campo.getAtor(location.getLinha(),location.getColuna()) == this;
+    //@ensures campo.getAtor(location.getLinha(),location.getColuna()) == null;
+    //Garante que o ator estara na nova localizacao
+    //@ensures campo.getAtor(newLocation.getLinha(),newLocation.getColuna()).equals(this);
     public void mover(Location location, Location newLocation){
         campo.colocarAtor(this, newLocation);
         pos_linha = newLocation.getLinha();
@@ -137,10 +167,8 @@ public abstract class Fish implements Actor
         campo.limparPosicao(location);
     }
     
-    //Esse ensures tambem da problema
-    /* requires idadeMinima >= 0;
-      @ ensures \result == this.age >= idadeMinima;
-      */
+    //@ requires idadeMinima >= 0;
+    //@ ensures \result ==> (this.age >= idadeMinima);
     /**
      * Metodo usado para saber quando o ator pode ter filho
      */
@@ -152,6 +180,11 @@ public abstract class Fish implements Actor
      * Metodo responsavel para dizer quantos filhos um ator podera ter num determinado momento
      * e usado um randomico
      */
+    //@ requires idadeMinima >= 0;
+    //@ requires probabilidade >= 0.0 && probabilidade <= 1.0;
+    //@ requires maxFilhos > 0;
+    //@ ensures \result >= 0;
+    //@ ensures \result <= maxFilhos;
     public int numeroDeFilhos(int idadeMinima, double probabilidade, int maxFilhos){
         int numFilhos = 0;
         if (podeTerFilho(idadeMinima) && random.nextDouble() <= probabilidade){

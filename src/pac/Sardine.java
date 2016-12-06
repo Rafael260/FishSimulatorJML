@@ -24,7 +24,7 @@ public class Sardine extends Fish
     public Sardine(Field campo, int linha, int coluna){
         super(campo,linha,coluna);
         //Inicializa a fome randomicamente
-        nivelFome = inicializaFome(MAX_FOOD);
+        nivelEnergia = inicializaFome(MAX_FOOD);
     }
 
     /**
@@ -37,7 +37,7 @@ public class Sardine extends Fish
         decrementaNivelFome();
         darCria(novosAtores);
         
-        Location loc_atual = campo.getLocation(pos_linha, pos_coluna);
+        Location loc_atual = getLocation();
         
         //Primeiro procura andar agrupado
         Location newLocation = flocking(campo.getPosicoesAdjacentesLivres(loc_atual));
@@ -46,19 +46,20 @@ public class Sardine extends Fish
             alimenta(1,MAX_FOOD);
             loc_atual.decrementaAlgas();
         }
-        //Coloca em newLocation a nova posição aleatória livre, caso não consiga andar agrupado
+        //Coloca em newLocation a nova posicao aleatoria livre, caso nao consiga andar agrupado
         if (newLocation == null){
             newLocation = campo.posicaoAdjacenteLivre(pos_linha,pos_coluna);
         }
-        //Se achou alguma posição, se movimenta
+        //Poderia mudar para um try catch, tenta se movimentar
+        //Se achou alguma posicao, se movimenta
         if (newLocation != null){
-            mover(new Location(pos_linha,pos_coluna),newLocation);
+            mover(getLocation(),newLocation);
         }
     }
     
     /**
-     * Usa o método numeroDeFilhos que gera randomicamente um número, que se for maior que zero
-     * e livres possuir ao menos uma posição, cria novas sardinhas
+     * Usa o metodo numeroDeFilhos que gera randomicamente um numero, que se for maior que zero
+     * e livres possuir ao menos uma posicao, cria novas sardinhas
      * @param novosAtores 
      */
     public void darCria(List<Actor> novosAtores){
@@ -73,9 +74,9 @@ public class Sardine extends Fish
     }
     
     /**
-     * Fazem as sardinhas procurarem posições que tem sardinhas próximas e que não tem predadores
-     * @param adjacentes Posições livres adjacentes
-     * @return A localização, caso consiga uma, null caso contrário
+     * Fazem as sardinhas procurarem posicoes que tem sardinhas proximas e que nao tem predadores
+     * @param adjacentes Posicoes livres adjacentes
+     * @return A localizacao, caso consiga uma, null caso contrario
      */
     public /*@ nullable pure @*/ Location flocking(List<Location> adjacentes){
         
@@ -122,7 +123,7 @@ public class Sardine extends Fish
         while (it.hasNext()){
             newLocation = it.next();
             ator = campo.getAtor(newLocation);
-            //Se a posicao adjacente possuir um tubarao
+            //Se a posicao adjacente possuir um predador
             if (ator instanceof Shark || ator instanceof Tuna){
                 return false;   
             }
@@ -130,4 +131,6 @@ public class Sardine extends Fish
         //Caso tiver passado por todas as localizacoes, e nao achar nenhum tubarao ou atum, retorna true
         return true;
     }
+
+	
 }

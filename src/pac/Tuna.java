@@ -16,42 +16,42 @@ public class Tuna extends Fish
     private static final int MAX_AGE = 53;
     private static final int MAX_FOOD = 29;
     private static final int BREED_AGE = 15;
-    private static final double BREED_PROBABILITY = 0.1;
+    private static final double BREED_PROBABILITY = 0.14;
     private static final int MAX_BREED = 4;
     private static final int SARDINE_FOOD_VALUE = 5;
     
     public Tuna(Field campo, int linha, int coluna) {
         super(campo,linha,coluna);
-        nivelFome = inicializaFome(MAX_FOOD);
+        nivelEnergia = inicializaFome(MAX_FOOD);
     }
 
     /**
-     * O atum vai verificar se tem sardinha próxima pra comer. Caso não tiver, move aleatoriamente
-     * @param actors A lista de novos atores que serão adicionados futuramente na lista principal
+     * O atum vai verificar se tem sardinha próxima pra comer. Caso nao tiver, move aleatoriamente
+     * @param actors A lista de novos atores que serao adicionados futuramente na lista principal
      */
     @Override
     public void act(List<Actor> actors) {
         incrementAge(MAX_AGE);
         decrementaNivelFome();
         darCria(actors);
-        Location location = new Location(pos_linha,pos_coluna);
+        Location location = campo.getLocation(pos_linha, pos_coluna);
         Location newLocation = encontrarComida(location);
         
-        //Se não encontrou comida
+        //Se nao encontrou comida
         if (newLocation == null){
            newLocation = campo.posicaoAdjacenteLivre(pos_linha,pos_coluna);
         }
         
-        //Se newLocation é null, achou posição pra se mover
+        //Se newLocation eh null, achou posicao pra se mover
         if (newLocation != null){
             mover(location,newLocation);
         }
         
     }
     /**
-     * Procura sardinhas em posições adjacentes
-     * @param location: localização atual do atum
-     * @return Localização de alguma sardinha, caso tenha, ou null, caso contrário
+     * Procura sardinhas em posicoes adjacentes
+     * @param location: localizacao atual do atum
+     * @return Localizacao de alguma sardinha, caso tenha, ou null, caso contrario
      */    
     public /*@ nullable pure @*/ Location encontrarComida(Location location){
         List<Location> adjacents = campo.adjacentes(location);
@@ -76,8 +76,8 @@ public class Tuna extends Fish
     }
     
     /**
-     * Dá cria se o randômico numfilhos for maior que zero.
-     * @param novosAtores: Lista de novos atores que serão adicionados na lista principal
+     * Da cria se o randomico numfilhos for maior que zero.
+     * @param novosAtores: Lista de novos atores que serao adicionados na lista principal
      */
     public void darCria(List<Actor> novosAtores){
         List<Location> livres = campo.getPosicoesAdjacentesLivres(pos_linha,pos_coluna);
@@ -89,5 +89,4 @@ public class Tuna extends Fish
             novosAtores.add(newTuna);
         }
     }
-    
 }

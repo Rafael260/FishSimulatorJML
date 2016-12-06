@@ -17,14 +17,14 @@ public class Shark extends Fish
     private static final int MAX_AGE = 60;
     private static final int MAX_FOOD = 40;
     private static final int BREED_AGE = 18;
-    private static final double BREED_PROBABILITY = 0.04;
+    private static final double BREED_PROBABILITY = 0.03;
     private static final int MAX_BREED = 3;
     private static final int SARDINE_FOOD_VALUE = 3;
     private static final int TUNA_FOOD_VALUE = 5;
     
     public Shark(Field campo, int linha, int coluna) {
         super(campo,linha,coluna);
-        nivelFome = inicializaFome(MAX_FOOD);
+        nivelEnergia = inicializaFome(MAX_FOOD);
     }
     
     /**
@@ -36,12 +36,12 @@ public class Shark extends Fish
         incrementAge(MAX_AGE);
         decrementaNivelFome();
         darCria(actors);
-        Location location = new Location(pos_linha,pos_coluna);
+        Location location = campo.getLocation(pos_linha, pos_coluna);
         Location newLocation = encontrarComida(location);
         
         if (newLocation == null){
             //System.out.println("Nao axei comida, vou tentar me isolar");
-            newLocation = isolar_se(campo.getPosicoesAdjacentesLivres(location));
+            newLocation = isolarSe(campo.getPosicoesAdjacentesLivres(location));
         }
         
         if (newLocation == null){
@@ -59,30 +59,23 @@ public class Shark extends Fish
      * Achar comida nas posicoes adjacentes
      */
     public /*@ nullable @*/ Location encontrarComida(Location location){
-        //Pega a lista de locais adjacentes à ele
+        //Pega a lista de locais adjacentes a� ele
         List<Location> adjacents = campo.adjacentes(location);
         Iterator<Location> it = adjacents.iterator();
-        //Procura se ao redor dele possui atum, pois é sua preferência
+        //Procura se ao redor dele possui atum, pois eh sua preferencia
         Location newLocation = encontrarAtum(adjacents);
-        if (newLocation != null)
-            return newLocation;
         
-        Actor ator;
-        Sardine sardine;
-        while (it.hasNext()){
-            newLocation = it.next();
-            ator = campo.getAtor(newLocation);
-            //Mesma logica para a sardinha
-            if (ator instanceof Sardine){
-                sardine = (Sardine) ator;
-                if (sardine.isAlive()){
-                    sardine.setMorto();
-                    this.alimenta(SARDINE_FOOD_VALUE, MAX_FOOD);
-                    return newLocation;
-                }
-            }
-        
+        //Se achou algum atum
+        if (newLocation != null){
+        	return newLocation;
         }
+        newLocation = encontrarSardinha(adjacents);
+        
+        //Se achou alguma sardinha
+        if (newLocation != null){
+        	return newLocation;
+        }
+        
         //Caso nao encontrar nenhuma comida, retorna null
         return null;
     }
@@ -104,12 +97,34 @@ public class Shark extends Fish
         }
         
         return null;
-    } 
+    }
+    
+    public /*@ nullable @*/ Location encontrarSardinha(List<Location> adjacentes){
+    	Iterator<Location> it = adjacentes.iterator();
+    	Location newLocation;
+    	Actor ator;
+        Sardine sardine;
+        while (it.hasNext()){
+            newLocation = it.next();
+            ator = campo.getAtor(newLocation);
+            //Mesma logica para a sardinha
+            if (ator instanceof Sardine){
+                sardine = (Sardine) ator;
+                if (sardine.isAlive()){
+                    sardine.setMorto();
+                    this.alimenta(SARDINE_FOOD_VALUE, MAX_FOOD);
+                    return newLocation;
+                }
+            }
+        
+        }
+        return null;
+    }
     
     /**
      * Procura locais adjacentes tais que as adjacentes destas nao possua tubarao
      */
-    public /*@ nullable @*/ Location isolar_se(List<Location> adjacents){
+    public /*@ nullable @*/ Location isolarSe(List<Location> adjacents){
         Iterator<Location> it = adjacents.iterator();
         Location location;
         while (it.hasNext()){
@@ -153,5 +168,6 @@ public class Shark extends Fish
             Shark newShark = new Shark(campo,local_atual.getLinha(),local_atual.getColuna());
             atores.add(newShark);
         }
-    }   
+    }
+  
 }
