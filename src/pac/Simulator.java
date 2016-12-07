@@ -89,7 +89,7 @@ public class Simulator
             atorAux = it.next();
             if (!atorAux.isAlive()){
                 it.remove();
-                campo.limparPosicao(atorAux.getLinha(), atorAux.getColuna());
+                campo.limparPosicao(atorAux.getLocation());
             }
         }
     }

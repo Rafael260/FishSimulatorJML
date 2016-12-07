@@ -47,9 +47,9 @@ public class Sardine extends Fish
         
         Location loc_atual = getLocation();
         List<Location> adjacentes = campo.adjacentes(loc_atual);
-        
+        List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
         //Primeiro procura andar agrupado
-        Location newLocation = flocking(campo.getPosicoesAdjacentesLivres(adjacentes));
+        Location newLocation = flocking(livres);
         
         if (loc_atual.getNumAlgas() > 0){
             alimenta(1,MAX_FOOD);
@@ -57,7 +57,7 @@ public class Sardine extends Fish
         }
         //Coloca em newLocation a nova posicao aleatoria livre, caso nao consiga andar agrupado
         if (newLocation == null){
-            newLocation = campo.posicaoAdjacenteLivre(pos_linha,pos_coluna);
+            newLocation = campo.posicaoAdjacenteLivre(livres);
         }
         //Poderia mudar para um try catch, tenta se movimentar
         //Se achou alguma posicao, se movimenta
@@ -72,7 +72,8 @@ public class Sardine extends Fish
      * @param novosAtores 
      */
     public void darCria(List<Actor> novosAtores){
-        List<Location> livres = campo.getPosicoesAdjacentesLivres(pos_linha,pos_coluna);
+    	List<Location> adjacentes = campo.adjacentes(getLocation());
+        List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
         int numFilhos = numeroDeFilhos(BREED_AGE,BREED_PROBABILITY,MAX_BREED);
         Location local_atual;
         for (int i = 0; i < numFilhos && livres.size() > 0; i++){

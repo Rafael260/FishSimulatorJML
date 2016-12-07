@@ -44,16 +44,17 @@ public class Shark extends Fish
         darCria(actors);
         Location location = campo.getLocation(pos_linha, pos_coluna);
         Location newLocation = encontrarComida(location);
-        
+        List<Location> adjacentes = campo.adjacentes(location);
+        List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
         if (newLocation == null){
-        	List<Location> adjacentes = campo.adjacentes(location);
+        	
             //System.out.println("Nao axei comida, vou tentar me isolar");
-            newLocation = isolarSe(campo.getPosicoesAdjacentesLivres(adjacentes));
+            newLocation = isolarSe(livres);
         }
         
         if (newLocation == null){
             //System.out.println("Nao me isolei, vou pra onde der");
-            newLocation = campo.posicaoAdjacenteLivre(pos_linha,pos_coluna);
+            newLocation = campo.posicaoAdjacenteLivre(livres);
         }
         
         //Se consegui achar um local para me mover, simbora
@@ -162,7 +163,8 @@ public class Shark extends Fish
      * Metodo para gerar novos tubaroes
      */
     public void darCria(List<Actor> atores){
-        List<Location> livres = campo.getPosicoesAdjacentesLivres(pos_linha,pos_coluna);
+    	List<Location> adjacentes = campo.adjacentes(getLocation());
+        List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
         int numFilhos = numeroDeFilhos(BREED_AGE,BREED_PROBABILITY,MAX_BREED);
         Location local_atual;
         //Adiciona os filhos nas posicoes adjacentes

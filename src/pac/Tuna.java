@@ -89,7 +89,8 @@ public class Tuna extends Fish
      * @param novosAtores: Lista de novos atores que serao adicionados na lista principal
      */
     public void darCria(List<Actor> novosAtores){
-        List<Location> livres = campo.getPosicoesAdjacentesLivres(pos_linha,pos_coluna);
+    	List<Location> adjacentes = campo.adjacentes(getLocation());
+        List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
         int numFilhos = numeroDeFilhos(BREED_AGE,BREED_PROBABILITY,MAX_BREED);
         Location local_atual;
         for (int i = 0; i < numFilhos && livres.size() > 0; i++){

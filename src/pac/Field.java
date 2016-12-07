@@ -87,18 +87,12 @@ public abstract class Field {
     }
     
     //@requires loc != null;
-    //@ensures \result == getAtor(loc.getLinha(),loc.getColuna());
+    //@requires estaNoIntervalo(loc.getLinha(),loc.getColuna());
+    //ensures \result == getAtor(loc.getLinha(),loc.getColuna());
     public /*@ nullable pure @*/ Actor getAtor(Location loc){
-        return getAtor(loc.getLinha(),loc.getColuna());
+        return campo[loc.getLinha()][loc.getColuna()].getAtor();
     }
     
-    //Podemos tratar uma excecao aqui, com base na linha e coluna que esta acessando
-    //@requires estaNoIntervalo(linha,coluna);
-    //@ensures \result == campo[linha][coluna].getAtor();
-    public /*@ nullable pure @*/ Actor getAtor (int linha, int coluna){
-        return campo[linha][coluna].getAtor();
-    }
-   
     //@ requires location != null;
     //@ ensures \result != null;
     //Garante que todos os locais no resultado sao de fato adjacentes
@@ -148,15 +142,8 @@ public abstract class Field {
     
         return livres;
     }
-    
-    public /*@ pure @*/ List<Location> getPosicoesAdjacentesLivres(int linha, int coluna){
-        Location location = this.campo[linha][coluna];
-        List<Location> adjacentes = adjacentes(getLocation(linha, coluna));
-    	return getPosicoesAdjacentesLivres(adjacentes);
-    }
-    
+     
     //@requires free != null;
-    //BRONCA - Variable "free" is not defined in current context
     //@ensures (free.size() > 0) ==> (\result == free.get(0));
     public /*@ nullable @*/ Location posicaoAdjacenteLivre(List<Location> free){
         if (free.size() > 0){
@@ -167,42 +154,17 @@ public abstract class Field {
         }
     }
     
-    public /*@ nullable pure @*/ Location posicaoAdjacenteLivre(int linha, int coluna){
-        Location location = this.campo[linha][coluna];
-        List<Location> adjacentes = adjacentes(location);
-        List<Location> livres = getPosicoesAdjacentesLivres(adjacentes);
-    	return posicaoAdjacenteLivre(livres);
-    }
     
-    //@ requires estaNoIntervalo(linha,coluna);
-    //BRONCA - O ASSIGNABLE DA ERRO
-    // assignable campo[linha][coluna].getAtor();
-    //@ ensures campo[linha][coluna].getAtor() == null;
-    public void limparPosicao(int linha, int coluna){
-    	campo[linha][coluna].setAtor(null);
-    }
-    
-    //BRONCA - O ASSIGNABLE DA ERRO
-    //assignable campo[location.getLinha()][location.getColuna()].getAtor();
     //@requires loc != null;
     //@ensures campo[loc.getLinha()][loc.getColuna()].getAtor() == null;
     public void limparPosicao(Location loc){
         campo[loc.getLinha()][loc.getColuna()].setAtor(null);
     }
     
-    //BRONCA - O ASSIGNABLE DA ERRO
-    //assignable campo[location.getLinha()][location.getColuna()].getAtor();
     //@requires ator != null;
     //@requires location != null;
     //@ensures campo[location.getLinha()][location.getColuna()].getAtor().equals(ator);
     public void colocarAtor(Actor ator, Location location){
         campo[location.getLinha()][location.getColuna()].setAtor(ator);
-    }
-    
-    //@requires estaNoIntervalo(linha,coluna);
-    //@ensures campo[linha][coluna].getAtor().equals(ator);
-    public void colocarAtor(Actor ator, int linha, int coluna){
-        Location newLocation = this.campo[linha][coluna];
-    	colocarAtor(ator,newLocation);
     }  
 }

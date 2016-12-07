@@ -18,16 +18,23 @@ public interface Actor {
 	//@public model instance boolean isActive;
 	//@public model instance int row;
 	//@public model instance int col;
-	//@public model instance int age;
+	//@public model instance int ageOf;
+	
 	
     public void act(List<Actor> actors);
     
     //@ensures \result ==> isActive;
     public boolean isAlive();
     
+    //@ensures \result == row;
     public /*@ pure @*/ int getLinha();
+    //@assignable row;
+    //@ensures row == pos_linha;
     public void setLinha(int pos_linha);
+    //@ensures \result == col;
     public /*@ pure @*/ int getColuna();
+    
+    //@assignable col;
     public void setColuna(int pos_coluna);
     public /*@ pure @*/ boolean equals(Actor ator);
     public /*@ pure @*/ int getAge();

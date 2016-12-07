@@ -17,10 +17,10 @@ public abstract class Fish implements Actor
 {
     protected /*@ nullable spec_public @*/ Random random;
     protected /*@ spec_public @*/ boolean isAlive; //@ in isActive;
-    protected /*@ spec_public @*/ int age;
+    protected /*@ spec_public @*/ int age; //@ in ageOf;
     protected /*@ spec_public @*/ int nivelEnergia;
-    protected /*@ spec_public @*/ int pos_linha;
-    protected /*@ spec_public @*/ int pos_coluna;
+    protected /*@ spec_public @*/ int pos_linha; //@ in row;
+    protected /*@ spec_public @*/ int pos_coluna; //@ in col;
     protected /*@ spec_public @*/ Field campo;
     protected /*@ spec_public @*/ int maxAge;
     
@@ -37,7 +37,7 @@ public abstract class Fish implements Actor
         this.campo = campo;
         pos_linha = linha;
         pos_coluna = coluna;
-        campo.colocarAtor(this, linha, coluna);
+        campo.colocarAtor(this, getLocation());
     }
     
     //@public invariant campo.estaNoIntervalo(pos_linha,pos_coluna);
@@ -46,6 +46,16 @@ public abstract class Fish implements Actor
     /*@ protected represents
       @ isActive = this.isAlive;
       @*/
+    /*@ protected represents
+    @ ageOf = this.age;
+    @*/
+    /*@ protected represents
+    @ row = this.pos_linha;
+    @*/
+    /*@ protected represents
+    @ col = this.pos_coluna;
+    @*/
+    
     /**
      * Funcao para saber se o ator esta vivo
      */
@@ -108,7 +118,7 @@ public abstract class Fish implements Actor
      */        
     public void setMorto(){
     	isAlive = false;
-    	campo.limparPosicao(pos_linha, pos_coluna);
+    	campo.limparPosicao(getLocation());
     }
     
     /**
@@ -184,7 +194,7 @@ public abstract class Fish implements Actor
     //@requires newLocation != null;
     //@requires Field.saoAdjacentes(getLocation(),newLocation);
     //@ ensures campo.getAtor(newLocation).equals(this);
-    //@ ensures campo.getAtor(\old(pos_linha),\old(pos_coluna)) == null;
+    // ensures campo.getAtor(\old(pos_linha),\old(pos_coluna)) == null;
     public void mover(Location newLocation){
         Location oldLocation = getLocation();
     	campo.colocarAtor(this, newLocation);
