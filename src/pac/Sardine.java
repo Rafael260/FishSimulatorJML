@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import exceptions.MorteException;
+
 
 /**
  * A simple model of a sardine.
@@ -22,7 +24,7 @@ public class Sardine extends Fish
     private static final int MAX_BREED = 3;
     
     public Sardine(Field campo, int linha, int coluna){
-        super(campo,linha,coluna);
+        super(campo,linha,coluna,MAX_AGE);
         //Inicializa a fome randomicamente
         nivelEnergia = inicializaFome(MAX_FOOD);
     }
@@ -33,8 +35,14 @@ public class Sardine extends Fish
      */
     @Override
     public void act(List<Actor> novosAtores){
-        incrementAge(MAX_AGE);
-        decrementaNivelFome();
+        
+    	try{
+    		incrementAge(MAX_AGE);
+    		decrementaNivelFome();
+    	}catch(MorteException e){
+    		setMorto();
+    	}
+        
         darCria(novosAtores);
         
         Location loc_atual = getLocation();
@@ -131,6 +139,4 @@ public class Sardine extends Fish
         //Caso tiver passado por todas as localizacoes, e nao achar nenhum tubarao ou atum, retorna true
         return true;
     }
-
-	
 }

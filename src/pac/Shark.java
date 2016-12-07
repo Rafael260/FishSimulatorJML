@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import exceptions.MorteException;
+
 
 /**
  * A simple model of a shark.
@@ -23,7 +25,7 @@ public class Shark extends Fish
     private static final int TUNA_FOOD_VALUE = 5;
     
     public Shark(Field campo, int linha, int coluna) {
-        super(campo,linha,coluna);
+        super(campo,linha,coluna,MAX_AGE);
         nivelEnergia = inicializaFome(MAX_FOOD);
     }
     
@@ -33,8 +35,12 @@ public class Shark extends Fish
      */
     @Override
     public void act(List<Actor> actors) {
-        incrementAge(MAX_AGE);
-        decrementaNivelFome();
+        try{
+        	incrementAge(MAX_AGE);
+        	decrementaNivelFome();
+        }catch(MorteException e){
+        	setMorto();
+        }
         darCria(actors);
         Location location = campo.getLocation(pos_linha, pos_coluna);
         Location newLocation = encontrarComida(location);
@@ -61,21 +67,17 @@ public class Shark extends Fish
     public /*@ nullable @*/ Location encontrarComida(Location location){
         //Pega a lista de locais adjacentes a  ele
         List<Location> adjacents = campo.adjacentes(location);
-        Iterator<Location> it = adjacents.iterator();
         //Procura se ao redor dele possui atum, pois eh sua preferencia
         Location newLocation = encontrarAtum(adjacents);
-        
         //Se achou algum atum
         if (newLocation != null){
         	return newLocation;
         }
         newLocation = encontrarSardinha(adjacents);
-        
         //Se achou alguma sardinha
         if (newLocation != null){
         	return newLocation;
         }
-        
         //Caso nao encontrar nenhuma comida, retorna null
         return null;
     }

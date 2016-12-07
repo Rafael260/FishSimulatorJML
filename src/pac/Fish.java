@@ -2,6 +2,8 @@ package pac;
 
 import java.util.Random;
 
+import exceptions.MorteException;
+
 
 /**
  * Write a description of class Fish here.
@@ -20,21 +22,26 @@ public abstract class Fish implements Actor
     protected /*@ spec_public @*/ int pos_linha;
     protected /*@ spec_public @*/ int pos_coluna;
     protected /*@ spec_public @*/ Field campo;
+    protected /*@ spec_public @*/ int maxAge;
     
     /**
      * Constructor for objects of class Fish
      */
-    public Fish(Field campo, int linha, int coluna)
+    public Fish(Field campo, int linha, int coluna, int maxAge)
     {
         random = new Random();
         isAlive = true;
         nivelEnergia = 15;
         age = 0;
+        this.maxAge = maxAge;
         this.campo = campo;
         pos_linha = linha;
         pos_coluna = coluna;
         campo.colocarAtor(this, linha, coluna);
     }
+    
+    //public invariant Field.estaNoIntervalo(pos_linha,pos_coluna);
+    
     
     /*@ protected represents
       @ isActive = this.isAlive;
@@ -100,8 +107,8 @@ public abstract class Fish implements Actor
      * Esvazia a posicao que o ator estava e marca como morto, para ser excluido da lista
      */        
     public void setMorto(){
-        campo.limparPosicao(pos_linha, pos_coluna);
-        isAlive = false;
+    	isAlive = false;
+    	campo.limparPosicao(pos_linha, pos_coluna);
     }
     
     /**
@@ -113,26 +120,47 @@ public abstract class Fish implements Actor
         return random.nextInt(maxFood - 10) + 10;
     }
     
-    /**
-     * Aumenta em 1 unidade a idade, e o seta morto caso atinga a idade maxima
-     */
-    //@requires maxAge > 0;
-    //Garante que se ele ja atingiu a idade maxima, ele morre
-    //@ensures (age > maxAge) ==> !this.isAlive;
-    public void incrementAge(int maxAge){
+    /*@   public normal_behavior
+    @ 		requires age < maxAge;
+    @  	assignable age;
+    @  	ensures age == \old(age) + 1;
+    @  also
+    @    public exceptional_behavior
+    @  	requires age == maxAge;
+    @  	assignable age;
+    @		signals_only MorteException;
+    @		signals (MorteException e)
+    @			age > maxAge;
+    @*/
+    public void incrementAge(int maxAge) throws MorteException{
         age++;
         if (age > maxAge)
-            this.setMorto();
+            throw new MorteException();
     }
     /**
      * Diminui 1 da fome, se zerar, seta morto
      */
-    //@ensures nivelEnergia == \old(nivelEnergia) - 1;
-    //@ensures (nivelEnergia <= 0) ==> !this.isAlive;
-    public void decrementaNivelFome(){
+    // ensures nivelEnergia == \old(nivelEnergia) - 1;
+    // ensures (nivelEnergia <= 0) ==> !this.isAlive;
+    
+    
+    /*@   public normal_behavior
+     @ 		requires nivelEnergia > 1;
+     @  	assignable nivelEnergia;
+     @  	ensures nivelEnergia == \old(nivelEnergia) - 1;
+     @  also
+     @    public exceptional_behavior
+     @  	requires nivelEnergia == 1;
+     @  	assignable nivelEnergia;
+     @		signals_only MorteException;
+     @		signals (MorteException e)
+     @			nivelEnergia == 0;
+     @ 
+     @*/
+    public void decrementaNivelFome() throws MorteException{
         nivelEnergia--;
-        if (nivelEnergia <= 0){
-            setMorto();
+        if (nivelEnergia == 0){
+            throw new MorteException();
         }
     }
     

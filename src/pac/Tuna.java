@@ -1,6 +1,9 @@
 package pac;
 
 import java.util.List;
+
+import exceptions.MorteException;
+
 import java.util.Iterator;
 
 
@@ -21,7 +24,7 @@ public class Tuna extends Fish
     private static final int SARDINE_FOOD_VALUE = 5;
     
     public Tuna(Field campo, int linha, int coluna) {
-        super(campo,linha,coluna);
+        super(campo,linha,coluna,MAX_AGE);
         nivelEnergia = inicializaFome(MAX_FOOD);
     }
 
@@ -31,8 +34,12 @@ public class Tuna extends Fish
      */
     @Override
     public void act(List<Actor> actors) {
-        incrementAge(MAX_AGE);
-        decrementaNivelFome();
+        try{
+        	incrementAge(MAX_AGE);
+        	decrementaNivelFome();
+        }catch(MorteException e){
+        	setMorto();
+        }
         darCria(actors);
         Location location = campo.getLocation(pos_linha, pos_coluna);
         Location newLocation = encontrarComida(location);
