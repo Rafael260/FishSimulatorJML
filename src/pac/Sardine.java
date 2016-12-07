@@ -46,9 +46,10 @@ public class Sardine extends Fish
         darCria(novosAtores);
         
         Location loc_atual = getLocation();
+        List<Location> adjacentes = campo.adjacentes(loc_atual);
         
         //Primeiro procura andar agrupado
-        Location newLocation = flocking(campo.getPosicoesAdjacentesLivres(loc_atual));
+        Location newLocation = flocking(campo.getPosicoesAdjacentesLivres(adjacentes));
         
         if (loc_atual.getNumAlgas() > 0){
             alimenta(1,MAX_FOOD);

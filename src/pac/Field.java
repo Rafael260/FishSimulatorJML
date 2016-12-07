@@ -135,14 +135,11 @@ public abstract class Field {
         return locations;
     }
     
-    //@requires location != null;
-    //BRONCA COM VARIAVEL LOCAL pos_adjacentes
-    //ensures (\forall int i; 0 <= i && i < pos_adjacentes.size(); (pos_adjacentes.get(i).getAtor() == null) ==> \result.contains(pos_adjacentes.get(i)));
+    //@requires pos_adjacentes != null;
+    //@ensures (\forall int i; 0 <= i && i < pos_adjacentes.size(); (((Location)pos_adjacentes.get(i)).getAtor() == null) ==> \result.contains(pos_adjacentes.get(i)));
     //@ensures (\forall int i; 0 <= i && i < \result.size(); ((Location)\result.get(i)).getAtor() == null);
-    public /*@ pure @*/ List<Location> getPosicoesAdjacentesLivres(Location location){
-        List<Location> livres = new LinkedList<Location>();
-        List<Location> pos_adjacentes = adjacentes(location);
-        
+    public /*@ pure @*/ List<Location> getPosicoesAdjacentesLivres(List<Location> pos_adjacentes){
+        List<Location> livres = new LinkedList<Location>();        
         for (Location loc_atual: pos_adjacentes){
             if (getAtor(loc_atual) == null){
                 livres.add(loc_atual);
@@ -154,14 +151,14 @@ public abstract class Field {
     
     public /*@ pure @*/ List<Location> getPosicoesAdjacentesLivres(int linha, int coluna){
         Location location = this.campo[linha][coluna];
-    	return getPosicoesAdjacentesLivres(location);
+        List<Location> adjacentes = adjacentes(getLocation(linha, coluna));
+    	return getPosicoesAdjacentesLivres(adjacentes);
     }
     
-    //@requires location != null;
+    //@requires free != null;
     //BRONCA - Variable "free" is not defined in current context
-    //ensures (free.size() > 0) ==> (\result == free.get(0));
-    public /*@ nullable @*/ Location posicaoAdjacenteLivre(Location location){
-        List<Location> free = getPosicoesAdjacentesLivres(location);
+    //@ensures (free.size() > 0) ==> (\result == free.get(0));
+    public /*@ nullable @*/ Location posicaoAdjacenteLivre(List<Location> free){
         if (free.size() > 0){
             return free.get(0);
         }
@@ -172,7 +169,9 @@ public abstract class Field {
     
     public /*@ nullable pure @*/ Location posicaoAdjacenteLivre(int linha, int coluna){
         Location location = this.campo[linha][coluna];
-    	return posicaoAdjacenteLivre(location);
+        List<Location> adjacentes = adjacentes(location);
+        List<Location> livres = getPosicoesAdjacentesLivres(adjacentes);
+    	return posicaoAdjacenteLivre(livres);
     }
     
     //@ requires estaNoIntervalo(linha,coluna);

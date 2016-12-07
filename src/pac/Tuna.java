@@ -46,7 +46,9 @@ public class Tuna extends Fish
         
         //Se nao encontrou comida
         if (newLocation == null){
-           newLocation = campo.posicaoAdjacenteLivre(pos_linha,pos_coluna);
+        	List<Location> adjacentes = campo.adjacentes(location);
+        	List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
+           newLocation = campo.posicaoAdjacenteLivre(livres);
         }
         
         //Se newLocation eh null, achou posicao pra se mover

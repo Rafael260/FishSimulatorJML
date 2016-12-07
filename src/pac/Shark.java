@@ -46,8 +46,9 @@ public class Shark extends Fish
         Location newLocation = encontrarComida(location);
         
         if (newLocation == null){
+        	List<Location> adjacentes = campo.adjacentes(location);
             //System.out.println("Nao axei comida, vou tentar me isolar");
-            newLocation = isolarSe(campo.getPosicoesAdjacentesLivres(location));
+            newLocation = isolarSe(campo.getPosicoesAdjacentesLivres(adjacentes));
         }
         
         if (newLocation == null){

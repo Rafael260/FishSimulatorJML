@@ -40,7 +40,7 @@ public abstract class Fish implements Actor
         campo.colocarAtor(this, linha, coluna);
     }
     
-    //public invariant Field.estaNoIntervalo(pos_linha,pos_coluna);
+    //@public invariant campo.estaNoIntervalo(pos_linha,pos_coluna);
     
     
     /*@ protected represents
