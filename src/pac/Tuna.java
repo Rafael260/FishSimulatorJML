@@ -25,7 +25,7 @@ public class Tuna extends Fish
     
     public Tuna(Field campo, int linha, int coluna) {
         super(campo,linha,coluna,MAX_AGE);
-        nivelEnergia = inicializaFome(MAX_FOOD);
+        inicializarFome(MAX_FOOD);
     }
 
     /**
@@ -46,9 +46,9 @@ public class Tuna extends Fish
         
         //Se nao encontrou comida
         if (newLocation == null){
-        	List<Location> adjacentes = campo.adjacentes(location);
-        	List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
-           newLocation = campo.posicaoAdjacenteLivre(livres);
+        	List<Location> adjacentes = campo.getAdjacentes(location);
+        	List<Location> livres = campo.getAdjacentesLivres(adjacentes);
+           newLocation = campo.getAdjacenteLivre(livres);
         }
         
         //Se newLocation eh null, achou posicao pra se mover
@@ -63,7 +63,7 @@ public class Tuna extends Fish
      * @return Localizacao de alguma sardinha, caso tenha, ou null, caso contrario
      */    
     public /*@ nullable pure @*/ Location encontrarComida(Location location){
-        List<Location> adjacents = campo.adjacentes(location);
+        List<Location> adjacents = campo.getAdjacentes(location);
         Iterator<Location> it = adjacents.iterator();
         Location newLocation;
         Actor ator;
@@ -89,8 +89,8 @@ public class Tuna extends Fish
      * @param novosAtores: Lista de novos atores que serao adicionados na lista principal
      */
     public void darCria(List<Actor> novosAtores){
-    	List<Location> adjacentes = campo.adjacentes(getLocation());
-        List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
+    	List<Location> adjacentes = campo.getAdjacentes(getLocation());
+        List<Location> livres = campo.getAdjacentesLivres(adjacentes);
         int numFilhos = numeroDeFilhos(BREED_AGE,BREED_PROBABILITY,MAX_BREED);
         Location local_atual;
         for (int i = 0; i < numFilhos && livres.size() > 0; i++){

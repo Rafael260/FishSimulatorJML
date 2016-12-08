@@ -15,7 +15,6 @@ import exceptions.MorteException;
  */
 public abstract class Fish implements Actor
 {
-    protected /*@ nullable spec_public @*/ Random random;
     protected /*@ spec_public @*/ boolean isAlive; //@ in isActive;
     protected /*@ spec_public @*/ int age; //@ in ageOf;
     protected /*@ spec_public @*/ int nivelEnergia;
@@ -29,8 +28,7 @@ public abstract class Fish implements Actor
      */
     public Fish(Field campo, int linha, int coluna, int maxAge)
     {
-        random = new Random();
-        isAlive = true;
+    	isAlive = true;
         nivelEnergia = 15;
         age = 0;
         this.maxAge = maxAge;
@@ -41,7 +39,6 @@ public abstract class Fish implements Actor
     }
     
     //@public invariant campo.estaNoIntervalo(pos_linha,pos_coluna);
-    
     
     /*@ protected represents
       @ isActive = this.isAlive;
@@ -59,6 +56,9 @@ public abstract class Fish implements Actor
     /**
      * Funcao para saber se o ator esta vivo
      */
+    //@also
+    //@assignable \nothing;
+    //@ensures \result == isActive;
     @Override
     public /*@ pure @*/ boolean isAlive() {
         return this.isAlive;
@@ -68,43 +68,71 @@ public abstract class Fish implements Actor
      * 
      * @return a idade do ator
      */
+    //@also
+    //@assignable \nothing;
+    //@ensures \result == ageOf;
     public /*@ pure @*/ int getAge() {
         return age;
     }
 
+    //@assignable age;
+    //@ensures this.age == age;
     public void setAge(int age) {
         this.age = age;
     }
 
     @Override
+    //@also
+    //@assignable \nothing;
+    //@ensures \result == row;
     public /*@ pure @*/ int getLinha() {
         return pos_linha;
     }
 
     @Override
+    //@also
+    //@assignable this.pos_linha;
+    //@ensures this.pos_linha == pos_linha;
     public void setLinha(int pos_linha) {
         this.pos_linha = pos_linha;
     }
 
     @Override
+    //@also
+    //@assignable \nothing;
+    //@ensures \result == this.pos_coluna;
     public /*@ pure @*/ int getColuna() {
         return pos_coluna;
     }
 
     @Override
+    //@also
+    //@assignable this.pos_coluna;
+    //@ensures this.pos_coluna == pos_coluna;
     public void setColuna(int pos_coluna) {
         this.pos_coluna = pos_coluna;
     }
     
+    //@also
+    //@assignable \nothing;
+    //@ensures \result == this.nivelEnergia;
+    @Override
     public int getEnergia(){
     	return this.nivelEnergia;
     }
     
-	public Location getLocation() {
+    //@also
+    //@assignable \nothing;
+    //@ensures \result == campo.getLocation(pos_linha, pos_coluna);
+	@Override
+    public Location getLocation() {
 		return campo.getLocation(pos_linha, pos_coluna);
 	}
     
     @Override
+    //@also
+    //@assignable \nothing;
+    //@ensures \result ==> (this.isAlive == ator.isAlive() && this.age == ator.getAge() && this.pos_linha == ator.getLinha() && this.pos_coluna == ator.getColuna());
 	public /*@ pure @*/ boolean equals(Actor ator) {
 		return this.isAlive == ator.isAlive() && this.age == ator.getAge() && this.pos_linha == ator.getLinha() && this.pos_coluna == ator.getColuna();
 	}
@@ -125,9 +153,11 @@ public abstract class Fish implements Actor
      * Inicia a fome de forma aleatoria
      */
     //@requires maxFood > 0;
-    //@ensures \result >= 10 && \result < maxFood;
-    public int inicializaFome(int maxFood){
-        return random.nextInt(maxFood - 10) + 10;
+    //@assignable nivelEnergia;
+    //@ensures nivelEnergia >= 10 && nivelEnergia < maxFood;
+    public void inicializarFome(int maxFood){
+        Random random = new Random();
+    	this.nivelEnergia = random.nextInt(maxFood - 10) + 10;
     }
     
     /*@   public normal_behavior
@@ -142,17 +172,12 @@ public abstract class Fish implements Actor
     @		signals (MorteException e)
     @			age > maxAge;
     @*/
+    //@assignable age;
     public void incrementAge(int maxAge) throws MorteException{
         age++;
         if (age > maxAge)
             throw new MorteException();
-    }
-    /**
-     * Diminui 1 da fome, se zerar, seta morto
-     */
-    // ensures nivelEnergia == \old(nivelEnergia) - 1;
-    // ensures (nivelEnergia <= 0) ==> !this.isAlive;
-    
+    }    
     
     /*@   public normal_behavior
      @ 		requires nivelEnergia > 1;
@@ -167,6 +192,7 @@ public abstract class Fish implements Actor
      @			nivelEnergia == 0;
      @ 
      @*/
+    //@assignable nivelEnergia;
     public void decrementaNivelFome() throws MorteException{
         nivelEnergia--;
         if (nivelEnergia == 0){
@@ -179,6 +205,7 @@ public abstract class Fish implements Actor
      */
     //@ requires valor >= 0;
     //@ requires maxFood > 0;
+    //@ assignable nivelEnergia;
     //@ ensures nivelEnergia >= \old(nivelEnergia);
     //@ ensures nivelEnergia <= maxFood;
     public void alimenta(int valor, int maxFood){
@@ -191,10 +218,11 @@ public abstract class Fish implements Actor
     /**
      * Move o ator de posicao no tabuleiro
      */
-    //@requires newLocation != null;
-    //@requires Field.saoAdjacentes(getLocation(),newLocation);
+    //@ requires newLocation != null;
+    //@ requires Field.saoAdjacentes(getLocation(),newLocation);
+    //@ assignable pos_linha, pos_coluna;
     //@ ensures campo.getAtor(newLocation).equals(this);
-    // ensures campo.getAtor(\old(pos_linha),\old(pos_coluna)) == null;
+    //@ ensures campo.getAtor(\old(getLocation())) == null;
     public void mover(Location newLocation){
         Location oldLocation = getLocation();
     	campo.colocarAtor(this, newLocation);
@@ -219,10 +247,12 @@ public abstract class Fish implements Actor
     //@ requires idadeMinima >= 0;
     //@ requires probabilidade >= 0.0 && probabilidade <= 1.0;
     //@ requires maxFilhos > 0;
+    //@ assignable \nothing;
     //@ ensures \result >= 0;
     //@ ensures \result <= maxFilhos;
-    public int numeroDeFilhos(int idadeMinima, double probabilidade, int maxFilhos){
-        int numFilhos = 0;
+    public /*@ pure @*/ int numeroDeFilhos(int idadeMinima, double probabilidade, int maxFilhos){
+        Random random = new Random();
+    	int numFilhos = 0;
         if (podeTerFilho(idadeMinima) && random.nextDouble() <= probabilidade){
             numFilhos = random.nextInt(maxFilhos) + 1;
         }

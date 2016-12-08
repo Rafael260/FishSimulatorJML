@@ -20,14 +20,14 @@ public interface Actor {
 	//@public model instance int col;
 	//@public model instance int ageOf;
 	
-	
     public void act(List<Actor> actors);
     
     //@ensures \result ==> isActive;
-    public boolean isAlive();
+    public /*@ pure @*/ boolean isAlive();
     
     //@ensures \result == row;
     public /*@ pure @*/ int getLinha();
+    
     //@assignable row;
     //@ensures row == pos_linha;
     public void setLinha(int pos_linha);

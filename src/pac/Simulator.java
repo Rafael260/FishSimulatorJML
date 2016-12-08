@@ -61,7 +61,7 @@ public class Simulator
         while (true){
             simView.showStatus(i, campo);
             //As algas existentes podem se espalhar pelo oceano
-            campo.atualizaAlgas();
+            campo.atualizarAlgas();
             //remove os atores que foram setados como mortos
             removeMortos();            
             acao();

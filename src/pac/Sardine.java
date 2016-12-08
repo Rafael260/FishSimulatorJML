@@ -26,7 +26,7 @@ public class Sardine extends Fish
     public Sardine(Field campo, int linha, int coluna){
         super(campo,linha,coluna,MAX_AGE);
         //Inicializa a fome randomicamente
-        nivelEnergia = inicializaFome(MAX_FOOD);
+        inicializarFome(MAX_FOOD);
     }
 
     /**
@@ -46,8 +46,8 @@ public class Sardine extends Fish
         darCria(novosAtores);
         
         Location loc_atual = getLocation();
-        List<Location> adjacentes = campo.adjacentes(loc_atual);
-        List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
+        List<Location> adjacentes = campo.getAdjacentes(loc_atual);
+        List<Location> livres = campo.getAdjacentesLivres(adjacentes);
         //Primeiro procura andar agrupado
         Location newLocation = flocking(livres);
         
@@ -57,7 +57,7 @@ public class Sardine extends Fish
         }
         //Coloca em newLocation a nova posicao aleatoria livre, caso nao consiga andar agrupado
         if (newLocation == null){
-            newLocation = campo.posicaoAdjacenteLivre(livres);
+            newLocation = campo.getAdjacenteLivre(livres);
         }
         //Poderia mudar para um try catch, tenta se movimentar
         //Se achou alguma posicao, se movimenta
@@ -72,8 +72,8 @@ public class Sardine extends Fish
      * @param novosAtores 
      */
     public void darCria(List<Actor> novosAtores){
-    	List<Location> adjacentes = campo.adjacentes(getLocation());
-        List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
+    	List<Location> adjacentes = campo.getAdjacentes(getLocation());
+        List<Location> livres = campo.getAdjacentesLivres(adjacentes);
         int numFilhos = numeroDeFilhos(BREED_AGE,BREED_PROBABILITY,MAX_BREED);
         Location local_atual;
         for (int i = 0; i < numFilhos && livres.size() > 0; i++){
@@ -94,7 +94,7 @@ public class Sardine extends Fish
         Iterator<Location> it = adjacentes.iterator();
         while (it.hasNext()){
             newLocation = it.next();
-            if (temSardinha(campo.adjacentes(newLocation)) && naoTemPredador(campo.adjacentes(newLocation))){
+            if (temSardinha(campo.getAdjacentes(newLocation)) && naoTemPredador(campo.getAdjacentes(newLocation))){
                 return newLocation;
             }
         }

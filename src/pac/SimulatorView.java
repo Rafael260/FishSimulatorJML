@@ -120,9 +120,9 @@ public class SimulatorView extends JFrame
      * Determine whether the simulation should continue to run.
      * @return true If there is more than one species alive.
      */
-    public /*@ pure @*/ boolean isViable(Field ocean)
+    public /*@ pure @*/ boolean isViable(Field field)
     {
-        return stats.isViable((Ocean)ocean);
+        return stats.isViable((Ocean)field);
     }
     
     /**

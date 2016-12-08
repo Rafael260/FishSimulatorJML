@@ -37,14 +37,16 @@ public abstract class Field {
         }
         for (int linha = 0; linha < tamanhoAltura; linha++){
             for (int coluna = 0; coluna < tamanhoLargura; coluna++){
-                campo[linha][coluna] = new Location(linha,coluna);
+                campo[linha][coluna] = new Location(linha,coluna,this);
                 campo[linha][coluna].definirNumeroDeAlgas();
             }
         }
     }
     
-    abstract public void atualizaAlgas();
+    abstract public void atualizarAlgas();
+    
     //@ requires estaNoIntervalo(row,col);
+    //@ assignable \nothing;
     //@ ensures \result == (Fish) campo[row][col].getAtor();
     public /*@ nullable pure @*/ Fish getFishAt(int row, int col)
     {
@@ -53,24 +55,30 @@ public abstract class Field {
         return fish;
     }
 
+    //@assignable \nothing;
+    //@ensures \result == tamanhoAltura;
     public /*@ pure @*/ int getHeight() {
         return tamanhoAltura;
     }
 
+    //@assignable \nothing;
+    //@ensures \result == tamanhoLargura;
     public /*@ pure @*/ int getWidth() {
         return tamanhoLargura;
     }
     
+    //@ assignable \nothing;
     //@ensures \result ==> (linha >= 0 && coluna >= 0 && linha < tamanhoAltura && coluna < tamanhoLargura);
     public /*@ pure @*/ boolean estaNoIntervalo(int linha, int coluna){
         return linha >= 0 && coluna >= 0 && linha < tamanhoAltura && coluna < tamanhoLargura;
     }
+    
     //Metodo estatico nao tem anotacao, ate onde eu sei
     public static /*@ pure @*/ boolean tamanhoAdequado(int height, int width){
         return height >= TAMANHO_MINIMO && width >= TAMANHO_MINIMO;
     }
     
-    public static /*@ pure @*/boolean saoAdjacentes(Location location1, Location location2){
+    public static /*@ pure @*/ boolean saoAdjacentes(Location location1, Location location2){
     	Double x1 = (double) location1.getLinha();
     	Double y1 = (double) location1.getColuna();
     	Double x2 = (double) location2.getLinha();
@@ -81,6 +89,7 @@ public abstract class Field {
     }
     
     //@requires estaNoIntervalo(linha,coluna);
+    //@assignable \nothing;
     //@ensures \result == campo[linha][coluna];
     public /*@ pure @*/ Location getLocation(int linha, int coluna){
         return campo[linha][coluna];
@@ -88,12 +97,14 @@ public abstract class Field {
     
     //@requires loc != null;
     //@requires estaNoIntervalo(loc.getLinha(),loc.getColuna());
+    //@assignable \nothing;
     //ensures \result == getAtor(loc.getLinha(),loc.getColuna());
     public /*@ nullable pure @*/ Actor getAtor(Location loc){
         return campo[loc.getLinha()][loc.getColuna()].getAtor();
     }
     
     //@ requires location != null;
+    //@ assignable \nothing;
     //@ ensures \result != null;
     //Garante que todos os locais no resultado sao de fato adjacentes
     //Como garantir que sao adjacentes? Verifica os valores absolutos das diferencas das posicoes x,y
@@ -101,7 +112,7 @@ public abstract class Field {
     /*@ ensures (\forall int i; 0 <= i && i < \result.size(); 
      @  saoAdjacentes((Location)\result.get(i),location));
      @*/
-    public /*@ pure @*/ List<Location> adjacentes(Location location){
+    public /*@ pure @*/ List<Location> getAdjacentes(Location location){
         List<Location> locations = new LinkedList<Location>();
         
         int linha = location.getLinha();
@@ -130,9 +141,10 @@ public abstract class Field {
     }
     
     //@requires pos_adjacentes != null;
+    //@assignable \nothing;
     //@ensures (\forall int i; 0 <= i && i < pos_adjacentes.size(); (((Location)pos_adjacentes.get(i)).getAtor() == null) ==> \result.contains(pos_adjacentes.get(i)));
     //@ensures (\forall int i; 0 <= i && i < \result.size(); ((Location)\result.get(i)).getAtor() == null);
-    public /*@ pure @*/ List<Location> getPosicoesAdjacentesLivres(List<Location> pos_adjacentes){
+    public /*@ pure @*/ List<Location> getAdjacentesLivres(List<Location> pos_adjacentes){
         List<Location> livres = new LinkedList<Location>();        
         for (Location loc_atual: pos_adjacentes){
             if (getAtor(loc_atual) == null){
@@ -144,8 +156,9 @@ public abstract class Field {
     }
      
     //@requires free != null;
+    //@assignable \nothing;
     //@ensures (free.size() > 0) ==> (\result == free.get(0));
-    public /*@ nullable @*/ Location posicaoAdjacenteLivre(List<Location> free){
+    public /*@ nullable pure @*/ Location getAdjacenteLivre(List<Location> free){
         if (free.size() > 0){
             return free.get(0);
         }

@@ -26,7 +26,7 @@ public class Shark extends Fish
     
     public Shark(Field campo, int linha, int coluna) {
         super(campo,linha,coluna,MAX_AGE);
-        nivelEnergia = inicializaFome(MAX_FOOD);
+        inicializarFome(MAX_FOOD);
     }
     
     /**
@@ -44,8 +44,8 @@ public class Shark extends Fish
         darCria(actors);
         Location location = campo.getLocation(pos_linha, pos_coluna);
         Location newLocation = encontrarComida(location);
-        List<Location> adjacentes = campo.adjacentes(location);
-        List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
+        List<Location> adjacentes = campo.getAdjacentes(location);
+        List<Location> livres = campo.getAdjacentesLivres(adjacentes);
         if (newLocation == null){
         	
             //System.out.println("Nao axei comida, vou tentar me isolar");
@@ -54,7 +54,7 @@ public class Shark extends Fish
         
         if (newLocation == null){
             //System.out.println("Nao me isolei, vou pra onde der");
-            newLocation = campo.posicaoAdjacenteLivre(livres);
+            newLocation = campo.getAdjacenteLivre(livres);
         }
         
         //Se consegui achar um local para me mover, simbora
@@ -68,7 +68,7 @@ public class Shark extends Fish
      */
     public /*@ nullable @*/ Location encontrarComida(Location location){
         //Pega a lista de locais adjacentes a  ele
-        List<Location> adjacents = campo.adjacentes(location);
+        List<Location> adjacents = campo.getAdjacentes(location);
         //Procura se ao redor dele possui atum, pois eh sua preferencia
         Location newLocation = encontrarAtum(adjacents);
         //Se achou algum atum
@@ -145,7 +145,7 @@ public class Shark extends Fish
      * Verifica as posicoes adjacentes para ver se possui tubarao proximo
      */
     public /*@ pure @*/ boolean naoTemTubaraoProximo(Location location){
-        List<Location> adjc = campo.adjacentes(location);
+        List<Location> adjc = campo.getAdjacentes(location);
         Iterator <Location> it = adjc.iterator();
         Location aux;
         Actor ator;
@@ -163,8 +163,8 @@ public class Shark extends Fish
      * Metodo para gerar novos tubaroes
      */
     public void darCria(List<Actor> atores){
-    	List<Location> adjacentes = campo.adjacentes(getLocation());
-        List<Location> livres = campo.getPosicoesAdjacentesLivres(adjacentes);
+    	List<Location> adjacentes = campo.getAdjacentes(getLocation());
+        List<Location> livres = campo.getAdjacentesLivres(adjacentes);
         int numFilhos = numeroDeFilhos(BREED_AGE,BREED_PROBABILITY,MAX_BREED);
         Location local_atual;
         //Adiciona os filhos nas posicoes adjacentes
