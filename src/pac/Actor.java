@@ -15,10 +15,17 @@ import java.util.List;
  */
 public interface Actor {
     
-	//@public model instance boolean isActive;
+	/*@ public model instance boolean isActive;
+	  @ initially isActive==true;
+	  @*/
+	
 	//@public model instance int row;
+	
 	//@public model instance int col;
-	//@public model instance int ageOf;
+	
+	/*@public model instance int ageOf;
+	  @ initially ageOf==0;
+	  @*/
 	
     public void act(List<Actor> actors);
     
