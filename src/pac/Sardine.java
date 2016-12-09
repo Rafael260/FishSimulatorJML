@@ -53,7 +53,7 @@ public class Sardine extends Fish
         
         if (loc_atual.getNumAlgas() > 0){
             alimenta(1,MAX_FOOD);
-            loc_atual.decrementaAlgas();
+            loc_atual.decrementarAlgas();
         }
         //Coloca em newLocation a nova posicao aleatoria livre, caso nao consiga andar agrupado
         if (newLocation == null){
@@ -92,9 +92,11 @@ public class Sardine extends Fish
         
         Location newLocation;
         Iterator<Location> it = adjacentes.iterator();
+        List<Location> adjacentesNewLocation;
         while (it.hasNext()){
             newLocation = it.next();
-            if (temSardinha(campo.getAdjacentes(newLocation)) && naoTemPredador(campo.getAdjacentes(newLocation))){
+            adjacentesNewLocation = campo.getAdjacentes(newLocation);
+            if (temSardinha(adjacentesNewLocation) && naoTemPredador(adjacentesNewLocation)){
                 return newLocation;
             }
         }

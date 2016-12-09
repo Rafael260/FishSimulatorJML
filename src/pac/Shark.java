@@ -13,9 +13,8 @@ import exceptions.MorteException;
  * Sharks eat groper or herring but they prefer groper.
  * Sharks are loners - they prefer not to swim next to each other
  */
-public class Shark extends Fish
-{
-    
+public class Shark extends Fish{
+	
     private static final int MAX_AGE = 60;
     private static final int MAX_FOOD = 40;
     private static final int BREED_AGE = 18;
@@ -42,9 +41,8 @@ public class Shark extends Fish
         	setMorto();
         }
         darCria(actors);
-        Location location = campo.getLocation(pos_linha, pos_coluna);
-        Location newLocation = encontrarComida(location);
-        List<Location> adjacentes = campo.getAdjacentes(location);
+        Location newLocation = encontrarComida();
+        List<Location> adjacentes = campo.getAdjacentes(getLocation());
         List<Location> livres = campo.getAdjacentesLivres(adjacentes);
         if (newLocation == null){
         	
@@ -66,9 +64,9 @@ public class Shark extends Fish
     /**
      * Achar comida nas posicoes adjacentes
      */
-    public /*@ nullable @*/ Location encontrarComida(Location location){
+    public /*@ nullable @*/ Location encontrarComida(){
         //Pega a lista de locais adjacentes a  ele
-        List<Location> adjacents = campo.getAdjacentes(location);
+        List<Location> adjacents = campo.getAdjacentes(getLocation());
         //Procura se ao redor dele possui atum, pois eh sua preferencia
         Location newLocation = encontrarAtum(adjacents);
         //Se achou algum atum
@@ -84,6 +82,11 @@ public class Shark extends Fish
         return null;
     }
     
+    //@requires adjacentes != null;
+    /* ensures (\result == null) ==> (\forall int i; i >= 0 && i < adjacentes.size();
+     @									!(campo.getAtor((Location)adjacentes.get(i)) instanceof Tuna));
+     @
+    */
     public /*@ nullable @*/ Location encontrarAtum(List<Location> adjacentes){
         Iterator<Location> it = adjacentes.iterator();
         Location newLocation;
@@ -95,14 +98,20 @@ public class Shark extends Fish
                 if (tuna.isAlive()){
                     tuna.setMorto();
                     this.alimenta(TUNA_FOOD_VALUE, MAX_FOOD);
+                    return newLocation;
                 }
-                return newLocation;
             }
         }
         
         return null;
     }
     
+    //@ requires adjacentes != null;
+    /* ensures (\result == null) ==> (\forall int i; i >= 0 && i < adjacentes.size();
+     @									!( campo.getAtor((Location)adjacentes.get(i)) instanceof Sardine && 
+     @										\old(campo.getAtor((Location)adjacentes.get(i))).isAlive() ));
+     @
+    */
     public /*@ nullable @*/ Location encontrarSardinha(List<Location> adjacentes){
     	Iterator<Location> it = adjacentes.iterator();
     	Location newLocation;
@@ -125,11 +134,13 @@ public class Shark extends Fish
         return null;
     }
     
-    /**
-     * Procura locais adjacentes tais que as adjacentes destas nao possua tubarao
-     */
-    public /*@ nullable @*/ Location isolarSe(List<Location> adjacents){
-        Iterator<Location> it = adjacents.iterator();
+  //@requires adjacentes != null;
+    /*@ ensures (\result == null) ==> (\forall int i; i >= 0 && i < adjacentes.size();
+     @									!naoTemTubaraoProximo((Location)adjacentes.get(i)));
+     @
+    @*/
+    public /*@ nullable @*/ Location isolarSe(List<Location> adjacentes){
+        Iterator<Location> it = adjacentes.iterator();
         Location location;
         while (it.hasNext()){
             location = it.next();

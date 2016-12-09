@@ -23,9 +23,10 @@ public class Location {
         this.ator = null;
         this.campo = campo;
     }
+    //@ public initially numAlgas == 0 && ator == null;
     
     //@public invariant campo.estaNoIntervalo(this.linha,this.coluna);
-
+    
     //@assignable \nothing;
     //@ensures \result == this.linha;
     public /*@ pure @*/ int getLinha() {
@@ -59,7 +60,7 @@ public class Location {
     //@assignable numAlgas;
     //@ensures (this.numAlgas < MAX_ALGAS) ==> (this.numAlgas == \old(this.numAlgas) + 1);
     //@ensures this.numAlgas <= MAX_ALGAS;
-    public void incrementaAlgas(){
+    public void incrementarAlgas(){
         if (numAlgas < MAX_ALGAS){
            numAlgas++;
         }
@@ -68,7 +69,7 @@ public class Location {
     //@assignable numAlgas;
     //@ensures (numAlgas > 0) ==> (numAlgas == \old(numAlgas) - 1);
     //@ensures numAlgas >= 0;
-    public void decrementaAlgas(){
+    public void decrementarAlgas(){
         if (numAlgas > 0){
             numAlgas--;
         }
@@ -77,7 +78,7 @@ public class Location {
     //@assignable numAlgas;
     //@ensures numAlgas <= MAX_ALGAS;
     //@ensures numAlgas >= 0;
-    public void definirNumeroDeAlgas(){
+    public void inicializarNumeroDeAlgas(){
         Random random = new Random();
         numAlgas = random.nextInt(MAX_ALGAS+1);
     }

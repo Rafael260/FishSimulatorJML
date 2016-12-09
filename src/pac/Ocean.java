@@ -23,7 +23,7 @@ public class Ocean extends Field
                     adjacent = getAdjacentes(campo[linha][coluna]);
                     
                     //E se espalha para essa posicao aleatoria
-                    adjacent.get(0).incrementaAlgas();
+                    adjacent.get(0).incrementarAlgas();
                 }
             }
         }

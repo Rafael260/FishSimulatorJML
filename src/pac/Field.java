@@ -38,11 +38,14 @@ public abstract class Field {
         for (int linha = 0; linha < tamanhoAltura; linha++){
             for (int coluna = 0; coluna < tamanhoLargura; coluna++){
                 campo[linha][coluna] = new Location(linha,coluna,this);
-                campo[linha][coluna].definirNumeroDeAlgas();
+                campo[linha][coluna].inicializarNumeroDeAlgas();
             }
         }
     }
     
+    /*@ public initially (\forall int i,j; i >= 0 && j >= 0 && i < tamanhoAltura && j < tamanhoLargura;
+    @					 campo[i][j].getAtor() == null);
+    @*/
     abstract public void atualizarAlgas();
     
     //@ requires estaNoIntervalo(row,col);

@@ -38,6 +38,8 @@ public abstract class Fish implements Actor
         campo.colocarAtor(this, getLocation());
     }
     
+    //@public initially (isAlive && age == 0 && nivelEnergia == 15);
+    
     //@public invariant campo.estaNoIntervalo(pos_linha,pos_coluna);
     
     /*@ protected represents

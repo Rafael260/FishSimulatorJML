@@ -19,7 +19,7 @@ public class Tuna extends Fish
     private static final int MAX_AGE = 53;
     private static final int MAX_FOOD = 29;
     private static final int BREED_AGE = 15;
-    private static final double BREED_PROBABILITY = 0.14;
+    private static final double BREED_PROBABILITY = 0.1;
     private static final int MAX_BREED = 4;
     private static final int SARDINE_FOOD_VALUE = 5;
     
@@ -41,12 +41,11 @@ public class Tuna extends Fish
         	setMorto();
         }
         darCria(actors);
-        Location location = campo.getLocation(pos_linha, pos_coluna);
-        Location newLocation = encontrarComida(location);
+        Location newLocation = encontrarComida();
         
         //Se nao encontrou comida
         if (newLocation == null){
-        	List<Location> adjacentes = campo.getAdjacentes(location);
+        	List<Location> adjacentes = campo.getAdjacentes(getLocation());
         	List<Location> livres = campo.getAdjacentesLivres(adjacentes);
            newLocation = campo.getAdjacenteLivre(livres);
         }
@@ -62,8 +61,8 @@ public class Tuna extends Fish
      * @param location: localizacao atual do atum
      * @return Localizacao de alguma sardinha, caso tenha, ou null, caso contrario
      */    
-    public /*@ nullable pure @*/ Location encontrarComida(Location location){
-        List<Location> adjacents = campo.getAdjacentes(location);
+    public /*@ nullable pure @*/ Location encontrarComida(){
+        List<Location> adjacents = campo.getAdjacentes(getLocation());
         Iterator<Location> it = adjacents.iterator();
         Location newLocation;
         Actor ator;

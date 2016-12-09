@@ -16,9 +16,9 @@ public class Simulator
     private /*@ nullable spec_public @*/ SimulatorView simView;
     private /*@ nullable spec_public @*/ List<Actor> atores;
     
-    private static final double PROBABILIDADE_CRIAR_SHARK = 0.02;
+    private static final double PROBABILIDADE_CRIAR_SHARK = 0.01;
     private static final double PROBABILIDADE_CRIAR_SARDINE = 0.08;
-    private static final double PROBABILIDADE_CRIAR_TUNA = 0.07;
+    private static final double PROBABILIDADE_CRIAR_TUNA = 0.08;
     
     
     public Simulator(int height, int width)
@@ -49,7 +49,7 @@ public class Simulator
                     Tuna tuna = new Tuna(campo,linha,coluna);
                     atores.add(tuna);
                 }
-                campo.getLocation(linha,coluna).definirNumeroDeAlgas();
+                campo.getLocation(linha,coluna).inicializarNumeroDeAlgas();
             }
         }
     }
@@ -81,7 +81,7 @@ public class Simulator
         }
     }
     
-    //Itera sobre a lista de atores, verificando quem foi morto
+    //@ensures (\forall int i; i >=0 && i < atores.size(); ((Actor)atores.get(i)).isAlive());
     public void removeMortos(){
         Actor atorAux;
         Iterator<Actor> it = atores.iterator();
