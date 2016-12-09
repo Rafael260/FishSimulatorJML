@@ -20,6 +20,9 @@ public abstract class Field {
     private static final /*@ spec_public @*/ int TAMANHO_MINIMO = 5;
     private static final /*@ spec_public @*/ int TAMANHO_PADRAO = 50;
     
+    //@ public instance constraint tamanhoAltura == \old(tamanhoAltura);
+    //@ public instance constraint tamanhoLargura == \old(tamanhoLargura);
+    
     //@ ensures tamanhoAdequado(height,width) ==> (tamanhoAltura == height);
     //@ ensures tamanhoAdequado(height,width) ==> (tamanhoLargura == width);
     //@ensures !tamanhoAdequado(height,width) ==> (tamanhoAltura == TAMANHO_PADRAO);

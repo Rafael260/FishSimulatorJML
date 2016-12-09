@@ -22,7 +22,7 @@ public abstract class Fish implements Actor
     protected /*@ spec_public @*/ int pos_coluna; //@ in col;
     protected /*@ spec_public @*/ Field campo;
     protected /*@ spec_public @*/ int maxAge;
-    
+
     /**
      * Constructor for objects of class Fish
      */
@@ -205,7 +205,7 @@ public abstract class Fish implements Actor
     /**
      * O ator chama esse metodo quando encontra comida, aumenta seu nivel da energia
      */
-    //@ requires valor >= 0;
+    //@ requires valor >= 1;
     //@ requires maxFood > 0;
     //@ assignable nivelEnergia;
     //@ ensures nivelEnergia >= \old(nivelEnergia);
@@ -220,6 +220,7 @@ public abstract class Fish implements Actor
     /**
      * Move o ator de posicao no tabuleiro
      */
+    //@ requires getLocation() != null;
     //@ requires newLocation != null;
     //@ requires Field.saoAdjacentes(getLocation(),newLocation);
     //@ assignable pos_linha, pos_coluna;
